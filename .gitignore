@@ -1,0 +1,19 @@
+# Google App Engine generated folder
+war/WEB-INF/appengine-generated/
+
+# more caches and things from deploy #
+war/WEB-INF/deploy/
+war/WEB-INF/classes/
+
+*.class
+
+# Package Files #
+*.jar
+*.war
+
+#Mac
+\.DS_Store
+\.classpath
+\.project
+\.settings
+\.metadata/
