@@ -144,18 +144,16 @@ public class IndexServlet extends HttpServlet {
 			
 			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
 			Date dateFin;
-			Date d = new Date();
+
 			try {			
 				dateFin = df.parse(horaFin);
-				d.setHours(dateFin.getHours());
-				d.setMinutes(dateFin.getMinutes());
 				long intervalSize = 1800000; //30 minutos en milisegundos
-				long maxTime = d.getTime(); //Hora fin en milisegundos
+				long maxTime = dateFin.getTime(); //Hora fin en milisegundos
 				
 				Date dateInicio = h1.getCreatedAt();
 				long minTime = h1.getCreatedAt().getTime(); //Hora inicio en milisegundos
 				
-				int intervalQuantities = (int)((maxTime - minTime) / intervalSize);
+				int intervalQuantities = Math.abs((int)((maxTime - minTime) / intervalSize));
 				
 				ArrayList<Data> datosH1 = new ArrayList<Data>();
 				ArrayList<Data> datosH2 = new ArrayList<Data>();
@@ -183,7 +181,7 @@ public class IndexServlet extends HttpServlet {
 				};
 				
 				for(int i = 0; i <= intervalQuantities; i++) {
-					long f = minTime + 1800000 * i;
+					long f = minTime + intervalSize * i;
 					Date intervalo = new Date(f);
 					Data d1 = dataDao.newData(h1.getId(), intervalo, (int)(Math.random()*(3000-500) + 500), (int)(Math.random()*(300-1) + 1), (int)(Math.random()*(100-1) + 1));
 					Data d2 = dataDao.newData(h2.getId(), intervalo, (int)(Math.random()*(3000-500) + 500), (int)(Math.random()*(300-1) + 1), (int)(Math.random()*(100-1) + 1));
@@ -284,7 +282,7 @@ public class IndexServlet extends HttpServlet {
 								
 				req.setAttribute("intervalos", intervalQuantities);
 				req.setAttribute("maxTime", maxTime);
-				req.setAttribute("dateFin", d);
+				req.setAttribute("dateFin", dateFin);
 				req.setAttribute("minTime", minTime);
 				req.setAttribute("dateInicio", dateInicio);
 				req.setAttribute("resta", maxTime - minTime);
