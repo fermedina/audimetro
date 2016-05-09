@@ -22,13 +22,23 @@ import es.upm.dit.isst.quientv.dao.IdiomaDAO;
 import es.upm.dit.isst.quientv.dao.IdiomaDAOImpl;
 import es.upm.dit.isst.quientv.dao.LocalizacionDAO;
 import es.upm.dit.isst.quientv.dao.LocalizacionDAOImpl;
+import es.upm.dit.isst.quientv.dao.TweetDAO;
+import es.upm.dit.isst.quientv.dao.TweetDAOImpl;
 import es.upm.dit.isst.quientv.dao.UsuarioDAO;
 import es.upm.dit.isst.quientv.dao.UsuarioDAOImpl;
 import es.upm.dit.isst.quientv.model.Data;
 import es.upm.dit.isst.quientv.model.Hashtag;
 import es.upm.dit.isst.quientv.model.Idioma;
 import es.upm.dit.isst.quientv.model.Localizacion;
+import es.upm.dit.isst.quientv.model.Tweet;
 import es.upm.dit.isst.quientv.model.Usuario;
+import twitter4j.Query;
+import twitter4j.QueryResult;
+import twitter4j.Status;
+import twitter4j.Twitter;
+import twitter4j.TwitterException;
+import twitter4j.TwitterFactory;
+import twitter4j.conf.ConfigurationBuilder;
 
 @SuppressWarnings("serial")
 public class IndexServlet extends HttpServlet {
@@ -127,40 +137,135 @@ public class IndexServlet extends HttpServlet {
 		String hashtag2 = req.getParameter("hashtag2");
 		String hashtag3 = req.getParameter("hashtag3");
 		String hashtag4 = req.getParameter("hashtag4");
+		
 		String horaFin = req.getParameter("hora_fin");
 		
+		HashtagDAO hashtagDao = HashtagDAOImpl.getInstance();
+		TweetDAO tweetDao = TweetDAOImpl.getInstance();
+		
+		TimeZone.setDefault(TimeZone.getTimeZone("GMT+2:00"));
+		
 		if (hashtag1 != null && hashtag2 != null && hashtag3 != null && hashtag4 != null) {
-			HashtagDAO hashtagDao = HashtagDAOImpl.getInstance();
+			
+			// Obtenemos los hashtags almacenados y los borramos antes de guardar los nuevos
 			for(Hashtag hashtag: hashtagDao.getHashtagList()) {
 				hashtagDao.deleteHashtag(hashtag.getId());
 			};
-						
+			
+			// Guardamos los nuevos hashtags
 			Hashtag h1 = hashtagDao.newHashtag(hashtag1);
 			Hashtag h2 = hashtagDao.newHashtag(hashtag2);
 			Hashtag h3 = hashtagDao.newHashtag(hashtag3);
-			Hashtag h4 = hashtagDao.newHashtag(hashtag4);
-			
-			TimeZone.setDefault(TimeZone.getTimeZone("GMT+2:00"));
+			Hashtag h4 = hashtagDao.newHashtag(hashtag4);			
 			
 			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
-			Date dateFin;
+			Date dateFin; // Momento de fin de la búsqueda
 
 			try {			
 				dateFin = df.parse(horaFin);
 				long intervalSize = 1800000; //30 minutos en milisegundos
 				long maxTime = dateFin.getTime(); //Hora fin en milisegundos
 				
-				Date dateInicio = h1.getCreatedAt();
+				Date dateInicio = h1.getCreatedAt(); // Momento de inicio de la búsqueda
 				long minTime = h1.getCreatedAt().getTime(); //Hora inicio en milisegundos
 				
-				int intervalQuantities = Math.abs((int)((maxTime - minTime) / intervalSize));
+				// Calculamos la cantidad de intervalos de 30 minutos entre la fecha de inicio y la de fin
+				int intervalQuantities = Math.abs((int)((maxTime - minTime) / intervalSize)); 
 				
-				ArrayList<Data> datosH1 = new ArrayList<Data>();
-				ArrayList<Data> datosH2 = new ArrayList<Data>();
-				ArrayList<Data> datosH3 = new ArrayList<Data>();
-				ArrayList<Data> datosH4 = new ArrayList<Data>();
+				ArrayList<Data> tweetsH1 = new ArrayList<Data>();
+				ArrayList<Data> tweetsH2 = new ArrayList<Data>();
+				ArrayList<Data> tweetsH3 = new ArrayList<Data>();
+				ArrayList<Data> tweetsH4 = new ArrayList<Data>();
 				
-				int tweetsH1 = 0;
+				// Borramos todos los tweets almacenados
+				for(Tweet tweet: tweetDao.getTweetList()) {
+					tweetDao.deleteTweet(tweet.getId());
+				};
+				
+				// Configuración de Twitter
+				ConfigurationBuilder cb = new ConfigurationBuilder();
+				cb.setDebugEnabled(true)
+				  .setOAuthConsumerKey("E2BkS641HFWmP8FpniuRV17sz")
+				  .setOAuthConsumerSecret("Hqm6syuHasgDtOt1W80Ug4imHViWljrOraejJgc4ps3vY2vYMe")
+				  .setOAuthAccessToken("185700333-rNEFh6XQQENeb2MW1aHyCdM1BKHragwOzKb0IaYO")
+				  .setOAuthAccessTokenSecret("9aPuPiIVOEfdSwPIN52GsC99OjXWta2h17xMYr6tV04CA");
+				TwitterFactory tf = new TwitterFactory(cb.build());
+				Twitter twitter = tf.getInstance();
+				
+				/*String[] users = {"@alfredo", "@fernando", "@sergio", "@andrea", "@manu", "@roberto"};
+				String[] imgs = {"count1.jpeg", "count2.jpeg", "count4.jpeg", "count3.jpeg", "count5.jpeg", "count5.jpeg"};
+				int[] seguidores = {503, 371, 640, 1305, 200, 437};
+				String[] tweets = {"Miss mundo, Miss universo y Miss Aljarafe! Jaja",
+						"Por ejemplo, este mantel",
+						"Muy mal el mensaje final. 0 en educación 10 en alarmismo",
+						"el azúcar esta presente en la mayoría de los alimentos, aunque este escondida con otro nombre",
+						"Un cartel de Kortatu en",
+						"Tu hermano chico. Qué clásico."};
+				String[] idiomas = {"Espanol", "Ingles", "Frances"};
+				String[] ciudades = {"Toledo", "Madrid", "Barcelona", "Sevilla"};
+				int[] retweets = {5, 7, 10, 20, 40, 6, 8, 100, 97, 58};
+				int[] favoritos = {10, 16, 3, 8, 38, 65, 101, 4, 17};*/
+				
+				/*for(int i = 0; i <= intervalQuantities; i++) {
+					int random1 = (int)(Math.random()*6);
+					Tweet t1 = tweetDao.newTweet(h1.getId(), tweets[random1], idiomas[(int)(Math.random()*3)], ciudades[(int)(Math.random()*4)], users[random1], "https://twitter.com/", imgs[random1], seguidores[random1], retweets[(int)(Math.random()*10)], favoritos[(int)(Math.random()*9)]);
+					int random2 = (int)(Math.random()*6);
+					Tweet t2 = tweetDao.newTweet(h1.getId(), tweets[random2], idiomas[(int)(Math.random()*3)], ciudades[(int)(Math.random()*4)], users[random2], "https://twitter.com/", imgs[random2], seguidores[random2], retweets[(int)(Math.random()*10)], favoritos[(int)(Math.random()*9)]);
+					int random3 = (int)(Math.random()*6);
+					Tweet t3 = tweetDao.newTweet(h1.getId(), tweets[random3], idiomas[(int)(Math.random()*3)], ciudades[(int)(Math.random()*4)], users[random3], "https://twitter.com/", imgs[random3], seguidores[random3], retweets[(int)(Math.random()*10)], favoritos[(int)(Math.random()*9)]);
+					int random4 = (int)(Math.random()*6);
+					Tweet t4 = tweetDao.newTweet(h1.getId(), tweets[random4], idiomas[(int)(Math.random()*3)], ciudades[(int)(Math.random()*4)], users[random4], "https://twitter.com/", imgs[random4], seguidores[random4], retweets[(int)(Math.random()*10)], favoritos[(int)(Math.random()*9)]);
+				
+				}*/
+				
+				
+				
+				Query query = new Query("#MiCasaRevilla");
+				try {
+					QueryResult result = twitter.search(query);
+					
+					String urlTwitter = "https://twitter.com/";
+															
+					for (Status status : result.getTweets()) {
+						tweetDao.newTweet(h1.getId(), status.getText(), status.getLang(), status.getUser().getLocation(), status.getUser().getScreenName(), urlTwitter + status.getUser().getScreenName(), status.getUser().getProfileImageURL(), status.getUser().getFollowersCount(), status.getRetweetCount(), status.getFavoriteCount());
+				        //System.out.println("@" + status.getUser().getScreenName() + ":" + status.getText());
+				    }
+				} catch (TwitterException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			    
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				
+				/*int tweetsH1 = 0;
 				int tweetsH2 = 0;
 				int tweetsH3 = 0;
 				int tweetsH4 = 0;
@@ -173,9 +278,9 @@ public class IndexServlet extends HttpServlet {
 				int favoritosH1 = 0;
 				int favoritosH2 = 0;
 				int favoritosH3 = 0;
-				int favoritosH4 = 0;
+				int favoritosH4 = 0;*/
 				
-				DataDAO dataDao = DataDAOImpl.getInstance();
+				/*DataDAO dataDao = DataDAOImpl.getInstance();
 				for(Data data: dataDao.getDataList()) {
 					dataDao.deleteData(data.getId());
 				};
@@ -276,6 +381,7 @@ public class IndexServlet extends HttpServlet {
 				for(int i = 0; i < 8; i++) {
 					usuarios.add(todosUsuarios.get(i));
 				}
+				*/
 				
 				SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-YYYY");
 				String dateView = sdf.format(new Date());
@@ -286,7 +392,7 @@ public class IndexServlet extends HttpServlet {
 				req.setAttribute("minTime", minTime);
 				req.setAttribute("dateInicio", dateInicio);
 				req.setAttribute("resta", maxTime - minTime);
-				req.setAttribute("datosH1", datosH1);
+				/*req.setAttribute("datosH1", datosH1);
 				req.setAttribute("datosH2", datosH2);
 				req.setAttribute("datosH3", datosH3);
 				req.setAttribute("datosH4", datosH4);
@@ -302,7 +408,7 @@ public class IndexServlet extends HttpServlet {
 				req.setAttribute("favoritosH2", favoritosH2);
 				req.setAttribute("favoritosH3", favoritosH3);
 				req.setAttribute("favoritosH4", favoritosH4);
-				req.setAttribute("usuarios", usuarios);
+				req.setAttribute("usuarios", usuarios);*/
 				req.setAttribute("fecha", dateView);
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
@@ -319,7 +425,7 @@ public class IndexServlet extends HttpServlet {
 			view.forward(req, resp);
 		}
 		
-		resp.getWriter().println(hashtag1 + " " + hashtag2 + " " + hashtag3 + " " + hashtag4);
+		//resp.getWriter().println(hashtag1 + " " + hashtag2 + " " + hashtag3 + " " + hashtag4);
 
 	}
 }
