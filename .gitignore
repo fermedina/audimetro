@@ -9,11 +9,10 @@ war/WEB-INF/classes/
 
 # Package Files #
 *.jar
+!twitter4j-core-4.0.4.jar
 *.war
 
 #Mac
 \.DS_Store
-\.classpath
-\.project
 \.settings
 \.metadata/
