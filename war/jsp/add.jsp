@@ -121,21 +121,21 @@
                         <div class="col-lg-6">
                             <div class="form-group input-group">
                                 <span class="input-group-addon"><i class="fa fa-hashtag"></i></span>
-                                <input type="text" name="hashtag2" class="form-control" required placeholder="Hashtag">
+                                <input type="text" name="hashtag2" class="form-control" placeholder="Hashtag">
                             </div>
                         </div>
 
                         <div class="col-lg-6">
                             <div class="form-group input-group">
                                 <span class="input-group-addon"><i class="fa fa-hashtag"></i></span>
-                                <input type="text" name="hashtag3" class="form-control" required placeholder="Hashtag">
+                                <input type="text" name="hashtag3" class="form-control" placeholder="Hashtag">
                             </div>
                         </div>
 
                         <div class="col-lg-6">
                             <div class="form-group input-group">
                                 <span class="input-group-addon"><i class="fa fa-hashtag"></i></span>
-                                <input type="text" name="hashtag4" class="form-control" required placeholder="Hashtag">
+                                <input type="text" name="hashtag4" class="form-control" placeholder="Hashtag">
                             </div>
                         </div>
 
