@@ -65,15 +65,21 @@
                             <li>
                                 <a href="hashtag1"><i class="fa fa-hashtag"></i> Hashtag1</a>
                             </li>
-                            <li>
-                                <a href="hashtag2"><i class="fa fa-hashtag"></i> Hashtag2</a>
-                            </li>
-                            <li>
-                                <a href="hashtag3"><i class="fa fa-hashtag"></i> Hashtag3</a>
-                            </li>
-                            <li>
-                                <a href="hashtag4"><i class="fa fa-hashtag"></i> Hashtag4</a>
-                            </li>
+                            <c:if test="${not empty hashtag2}">                                          
+	                            <li>
+	                                <a href="hashtag2"><i class="fa fa-hashtag"></i> Hashtag2</a>
+	                            </li>
+                            </c:if>
+                            <c:if test="${not empty hashtag3}">
+	                            <li>
+	                                <a href="hashtag3"><i class="fa fa-hashtag"></i> Hashtag3</a>
+	                            </li>
+                            </c:if>
+                            <c:if test="${not empty hashtag4}">
+	                            <li>
+	                                <a href="hashtag4"><i class="fa fa-hashtag"></i> Hashtag4</a>
+	                            </li>
+                            </c:if>
                         </ul>
                     </li>
                     <li>
@@ -129,69 +135,75 @@
                             </a>
                         </div>
                     </div>
-                    <div class="col-lg-3 col-md-6">
-                        <div class="panel panel-green-black">
-                            <div class="panel-heading">
-                                <div class="row">
-                                    <div class="col-xs-3">
-                                        <i class="fa fa-hashtag fa-3x"></i>
-                                    </div>
-                                    <div class="col-xs-9">
-                                        <div class="huge"><c:out value="${hashtag2.nombre}" /></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <a href="hashtag2">
-                                <div class="panel-footer">
-                                    <span class="pull-left">Ver detalles</span>
-                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                    <div class="clearfix"></div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6">
-                        <div class="panel panel-orange">
-                            <div class="panel-heading">
-                                <div class="row">
-                                    <div class="col-xs-3">
-                                        <i class="fa fa-hashtag fa-3x"></i>
-                                    </div>
-                                    <div class="col-xs-9">
-                                        <div class="huge"><c:out value="${hashtag3.nombre}" /></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <a href="hashtag3">
-                                <div class="panel-footer">
-                                    <span class="pull-left">Ver detalles</span>
-                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                    <div class="clearfix"></div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6">
-                        <div class="panel panel-red">
-                            <div class="panel-heading">
-                                <div class="row">
-                                    <div class="col-xs-3">
-                                        <i class="fa fa-hashtag fa-3x"></i>
-                                    </div>
-                                    <div class="col-xs-9">
-                                        <div class="huge"><c:out value="${hashtag4.nombre}" /></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <a href="hashtag4">
-                                <div class="panel-footer">
-                                    <span class="pull-left">Ver detalles</span>
-                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                    <div class="clearfix"></div>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
+                    <c:if test="${not empty hashtag2}">
+                    	<div class="col-lg-3 col-md-6">
+	                        <div class="panel panel-green-black">
+	                            <div class="panel-heading">
+	                                <div class="row">
+	                                    <div class="col-xs-3">
+	                                        <i class="fa fa-hashtag fa-3x"></i>
+	                                    </div>
+	                                    <div class="col-xs-9">
+	                                        <div class="huge"><c:out value="${hashtag2.nombre}" /></div>
+	                                    </div>
+	                                </div>
+	                            </div>
+	                            <a href="hashtag2">
+	                                <div class="panel-footer">
+	                                    <span class="pull-left">Ver detalles</span>
+	                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+	                                    <div class="clearfix"></div>
+	                                </div>
+	                            </a>
+	                        </div>
+	                    </div>
+					</c:if>
+                    <c:if test="${not empty hashtag3}">
+	                    <div class="col-lg-3 col-md-6">
+	                        <div class="panel panel-orange">
+	                            <div class="panel-heading">
+	                                <div class="row">
+	                                    <div class="col-xs-3">
+	                                        <i class="fa fa-hashtag fa-3x"></i>
+	                                    </div>
+	                                    <div class="col-xs-9">
+	                                        <div class="huge"><c:out value="${hashtag3.nombre}" /></div>
+	                                    </div>
+	                                </div>
+	                            </div>
+	                            <a href="hashtag3">
+	                                <div class="panel-footer">
+	                                    <span class="pull-left">Ver detalles</span>
+	                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+	                                    <div class="clearfix"></div>
+	                                </div>
+	                            </a>
+	                        </div>
+	                    </div>
+	                </c:if>
+	                <c:if test="${not empty hashtag4}">
+	                    <div class="col-lg-3 col-md-6">
+	                        <div class="panel panel-red">
+	                            <div class="panel-heading">
+	                                <div class="row">
+	                                    <div class="col-xs-3">
+	                                        <i class="fa fa-hashtag fa-3x"></i>
+	                                    </div>
+	                                    <div class="col-xs-9">
+	                                        <div class="huge"><c:out value="${hashtag4.nombre}" /></div>
+	                                    </div>
+	                                </div>
+	                            </div>
+	                            <a href="hashtag4">
+	                                <div class="panel-footer">
+	                                    <span class="pull-left">Ver detalles</span>
+	                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+	                                    <div class="clearfix"></div>
+	                                </div>
+	                            </a>
+	                        </div>
+	                    </div>
+	            	</c:if>
                 </div>
                 <!-- /.List hashtag -->
 
@@ -231,10 +243,11 @@
                             </div>
                             <div class="panel-body">
                                 <div class="list-group">
-                                	<c:forEach items="${usuarios}" var="usuario">
+                                
+                                	<c:forEach items="${lastTweets}" var="tweet">
 										<a href="#" class="list-group-item">
-	                                        <span class="badge"><c:out value="${usuario.nombre}" /></span>
-	                                        <i class="fa fa-fw fa-twitter"></i> <c:out value="${usuario.tweet}" />
+	                                        <span class="badge"><c:out value="${tweet.usuario}" /></span>
+	                                        <i class="fa fa-fw fa-twitter"></i> <c:out value="${tweet.texto}" />
 	                                    </a>
 									</c:forEach>
                                 </div>
@@ -262,24 +275,30 @@
                                         <tbody>
                                             <tr>
                                                 <td><c:out value="${hashtag1.nombre}" /></td>
-                                                <td><c:out value="${retweetsH1}" /></td>
-                                                <td><c:out value="${favoritosH1}" /></td>
+                                                <td><c:out value="${retweetsCount[0]}" /></td>
+                                                <td><c:out value="${favCount[0]}" /></td>
                                             </tr>
-                                            <tr>
-                                                <td><c:out value="${hashtag2.nombre}" /></td>
-                                                <td><c:out value="${retweetsH2}" /></td>
-                                                <td><c:out value="${favoritosH2}" /></td>
-                                            </tr>
-                                            <tr>
-                                                <td><c:out value="${hashtag3.nombre}" /></td>
-                                                <td><c:out value="${retweetsH3}" /></td>
-                                                <td><c:out value="${favoritosH3}" /></td>
-                                            </tr>
-                                            <tr>
-                                                <td><c:out value="${hashtag4.nombre}" /></td>
-                                                <td><c:out value="${retweetsH4}" /></td>
-                                                <td><c:out value="${favoritosH4}" /></td>
-                                            </tr>
+                                            <c:if test="${not empty hashtag2}">
+	                                            <tr>
+	                                                <td><c:out value="${hashtag2.nombre}" /></td>
+	                                                <td><c:out value="${retweetsCount[1]}" /></td>
+	                                                <td><c:out value="${favCount[1]}" /></td>
+	                                            </tr>
+                                            </c:if>
+                                            <c:if test="${not empty hashtag3}">
+	                                            <tr>
+	                                                <td><c:out value="${hashtag3.nombre}" /></td>
+	                                                <td><c:out value="${retweetsCount[2]}" /></td>
+	                                                <td><c:out value="${favCount[2]}" /></td>
+	                                            </tr>
+                                            </c:if>
+                                            <c:if test="${not empty hashtag4}">
+	                                            <tr>
+	                                                <td><c:out value="${hashtag4.nombre}" /></td>
+	                                                <td><c:out value="${retweetsCount[3]}" /></td>
+	                                                <td><c:out value="${favCount[3]}" /></td>
+	                                            </tr>
+                                            </c:if>
                                         </tbody>
                                     </table>
                                 </div>
@@ -314,16 +333,16 @@
 	        element: 'morris-donut-chart',
 	        data: [{
 	            label: "#" + "${hashtag1.nombre}",
-	            value: "${tweetsH1}"
+	            value: "${tweetsCount[0]}"
 	        }, {
 	            label: "#" + "${hashtag2.nombre}",
-	            value: "${tweetsH2}"
+	            value: "${tweetsCount[1]}"
 	        }, {
 	            label: "#" + "${hashtag3.nombre}",
-	            value: "${tweetsH3}"
+	            value: "${tweetsCount[2]}"
 	        }, {
 	            label: "#" + "${hashtag4.nombre}",
-	            value: "${tweetsH4}"
+	            value: "${tweetsCount[3]}"
 	        }],
 	        resize: true,
 	        colors: ['#337AB7', '#088A08', '#FF8000', '#d9534f']
