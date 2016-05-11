@@ -11,28 +11,16 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import es.upm.dit.isst.quientv.dao.DataDAO;
-import es.upm.dit.isst.quientv.dao.DataDAOImpl;
 import es.upm.dit.isst.quientv.dao.HashtagDAO;
 import es.upm.dit.isst.quientv.dao.HashtagDAOImpl;
-import es.upm.dit.isst.quientv.dao.IdiomaDAO;
-import es.upm.dit.isst.quientv.dao.IdiomaDAOImpl;
-import es.upm.dit.isst.quientv.dao.LocalizacionDAO;
-import es.upm.dit.isst.quientv.dao.LocalizacionDAOImpl;
-import es.upm.dit.isst.quientv.dao.UsuarioDAO;
-import es.upm.dit.isst.quientv.dao.UsuarioDAOImpl;
-import es.upm.dit.isst.quientv.model.Data;
 import es.upm.dit.isst.quientv.model.Hashtag;
-import es.upm.dit.isst.quientv.model.Idioma;
-import es.upm.dit.isst.quientv.model.Localizacion;
-import es.upm.dit.isst.quientv.model.Usuario;
 
 @SuppressWarnings("serial")
 public class Hashtag2Servlet extends HttpServlet {
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
 		resp.setContentType("text/plain");
 		
-		HashtagDAO hashtagDao = HashtagDAOImpl.getInstance();
+		/*HashtagDAO hashtagDao = HashtagDAOImpl.getInstance();
 		Hashtag hashtag = hashtagDao.getHashtagList().get(1);
 		req.setAttribute("hashtag", hashtag);
 		
@@ -186,6 +174,6 @@ public class Hashtag2Servlet extends HttpServlet {
 		req.setAttribute("contador5", contadores[4]);
 		
 		RequestDispatcher view = req.getRequestDispatcher("/jsp/hashtag2.jsp");
-		view.forward(req, resp);
+		view.forward(req, resp);*/
 	}
 }
