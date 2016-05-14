@@ -191,7 +191,7 @@
                                 <h3 class="panel-title"><i class="fa fa-language"></i> Idiomas</h3>
                             </div>
                             <div class="panel-body chart-idiomas">
-                                <canvas id="chart-area" width="240" height="240"/>
+                                <canvas id="chart-area" width="50" height="50"/>
                             </div>
                         </div>
                     </div>
@@ -388,54 +388,82 @@
     
     <!-- Idiomas -->
     <script type="text/javascript">
-   		var pieData = [];
-   		var languagesLength = "${languagesLength}";
-   		var languages = [];
-   		var colors = [];
-   		var highlightColors = [];
+    
+    var pieData = [];
+       var languagesLength = "${languagesLength}";
+       var languages = [];
+       var colors = [];
+       var highlightColors = [];
+       
+       <c:forEach items="${languages}" var="i">
+	    	languages.push("${i}");
+	    </c:forEach>
+	    <c:forEach items="${colors}" var="i">
+	    	colors.push("${i}");
+	    </c:forEach>
+	    <c:forEach items="${highlightColors}" var="i">
+	    	highlightColors.push("${i}");
+	    </c:forEach>
+
+       for(var i = 0; i < languagesLength; i++) {
+		    pieData.push({
+		    	value: languages[i],
+		    	color: colors[i],
+		    	highlight: highlightColors[i],
+		        label: languages[i]
+		    });
+        }
+    
+    	var ctx = document.getElementById("chart-area").getContext("2d");
+    
+    	var data = {
+    	    labels: languages,
+    	    datasets: [
+    	        {
+    	            data: [300, 200, 100],
+    	            backgroundColor: colors,
+    	            hoverBackgroundColor: highlightColors
+    	        }]
+    	};
+    
+    	var options = {
+            responsive: true,
+            legend: {
+                position: 'bottom',
+            },
+            title: {
+                display: false
+            },
+            animation: {
+                animateScale: true,
+                animateRotate: true
+            }
+        };
    		
-   		<c:forEach items="${languages}" var="i">
-			languages.push("${i}");
-		</c:forEach>
-		<c:forEach items="${colors}" var="i">
-			colors.push("${i}");
-		</c:forEach>
-		<c:forEach items="${highlightColors}" var="i">
-			highlightColors.push("${i}");
-		</c:forEach>*/
-		
-   		for(var i = 0; i < languagesLength; i++) {
-			pieData.push({
-				value: languages[i],
-				color: colors[i],
-				highlight: highlightColors[i],
-	            label: languages[i]
-    		});
-    	}
-   			
-	    window.onload = function(){
-	        var ctx = document.getElementById("chart-area").getContext("2d");
-	        window.myPie = new Chart(ctx).Pie(pieData);
-	    };
+	    var myDoughnutChart = new Chart(ctx, {
+	        type: 'pie',
+	        data: data,
+	        options: options
+	    }); 			
     </script>
     
     <!-- Bar Chart - Localización -->
-    <!--<script type="text/javascript">
+    <script type="text/javascript">
     
 	    Morris.Bar({
 	        element: 'morris-bar-chart',
 	        data: [{
 	            city: 'Madrid',
-	            value: "Madrid"
+	            value: "200"
 	        }, {
 	            city: 'Barcelona',
-	            value: "Madrid"
+	            value: "100"
 	        }, {
 	            city: 'Sevilla',
-	            value: "Madrid"
+	            value: "100"
 	        }, {
 	            city: 'Toledo',
-	            value: "Madrid"
+	            value: "100"
 	        }],
 	        xkey: 'city',
 	        ykeys: ['value'],
@@ -446,7 +474,7 @@
 	        hideHover: 'auto',
 	        resize: true
 	    });
-    </script>-->
+    </script>
 
 </body>
 
