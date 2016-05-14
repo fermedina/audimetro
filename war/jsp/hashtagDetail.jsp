@@ -26,6 +26,9 @@
 
     <!-- Custom Fonts -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    
+    <!-- Datatable CSS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.11/css/jquery.dataTables.min.css">
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -63,17 +66,23 @@
                         <a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="fa fa-fw fa-list"></i> Hashtags <i class="fa fa-fw fa-caret-down"></i></a>
                         <ul id="demo" class="collapse">
                             <li>
-                                <a href="hashtag1"><i class="fa fa-hashtag"></i> Hashtag1</a>
+                                <a href="hashtagDetail?id=${hashtag1.id}"><i class="fa fa-hashtag"></i> <c:out value="${hashtag1.nombre}" /></a>
                             </li>
-                            <li>
-                                <a href="hashtag2"><i class="fa fa-hashtag"></i> Hashtag2</a>
-                            </li>
-                            <li>
-                                <a href="hashtag3"><i class="fa fa-hashtag"></i> Hashtag3</a>
-                            </li>
-                            <li>
-                                <a href="hashtag4"><i class="fa fa-hashtag"></i> Hashtag4</a>
-                            </li>
+                            <c:if test="${not empty hashtag2}">                                          
+	                            <li>
+	                                <a href="hashtagDetail?id=${hashtag2.id}"><i class="fa fa-hashtag"></i> <c:out value="${hashtag2.nombre}" /></a>
+	                            </li>
+                            </c:if>
+                            <c:if test="${not empty hashtag3}">
+	                            <li>
+	                                <a href="hashtagDetail?id=${hashtag3.id}"><i class="fa fa-hashtag"></i> <c:out value="${hashtag3.nombre}" /></a>
+	                            </li>
+                            </c:if>
+                            <c:if test="${not empty hashtag4}">
+	                            <li>
+	                                <a href="hashtagDetail?id=${hashtag4.id}"><i class="fa fa-hashtag"></i> <c:out value="${hashtag4.nombre}" /></a>
+	                            </li>
+                            </c:if>
                         </ul>
                     </li>
                     <li>
@@ -99,7 +108,7 @@
                                 <i class="fa fa-list"></i>  <a href="index">Hashtags</a>
                             </li>
                             <li class="active">
-                                <i class="fa fa-hashtag"></i> Hashtag3
+                                <i class="fa fa-hashtag"></i> <c:out value="${hashtag.nombre}" />
                             </li>
                         </ol>
                     </div>
@@ -107,7 +116,7 @@
                 <!-- /.row -->
 
                 <!-- Timeline -->
-                <div class="row">
+                <!-- <div class="row">
                     <div class="col-lg-12">
                         <div class="panel panel-red">
                             <div class="panel-heading">
@@ -115,6 +124,61 @@
                             </div>
                             <div class="panel-body">
                                 <div id="morris-area-chart"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>-->
+                
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="panel panel-red">
+                        	<div class="panel-heading">
+                                <h3 class="panel-title"><i class="fa fa-twitter"></i> Tweets</h3>
+                            </div>
+                            <div class="panel-body">
+                                <table id="data" class="display" cellspacing="0" width="100%">
+							        <thead>
+							            <tr>
+							                <th>Texto</th>
+							                <th>Idioma</th>
+							                <th>Localizacion</th>
+							                <th>Usuario</th>
+							                <th>Avatar</th>
+							                <th>Perfil</th>
+							                <th>Seguidores</th>
+							                <th>Retweets</th>
+							                <th>Favoritos</th>
+							            </tr>
+							        </thead>
+							        <tfoot>
+							            <tr>
+							                <th>Texto</th>
+							                <th>Idioma</th>
+							                <th>Localizacion</th>
+							                <th>Usuario</th>
+							                <th>Avatar</th>
+							                <th>Perfil</th>
+							                <th>Seguidores</th>
+							                <th>Retweets</th>
+							                <th>Favoritos</th>
+							            </tr>
+							        </tfoot>
+							        <tbody>
+							        	<c:forEach items="${tweetList}" var="tweet">
+								        	<tr>
+								            	<td><c:out value="${tweet.texto}" /></td>
+								                <td><c:out value="${tweet.idioma}" /></td>
+								                <td><c:out value="${tweet.localizacion}" /></td>
+								                <td><c:out value="${tweet.usuario}" /></td>
+								                <td><img src="${tweet.avatar}"></td>
+								                <td><a target="_blank" href="${tweet.linkProfile}">Link</a></td>
+								                <td><c:out value="${tweet.seguidoresUsuario}" /></td>
+								                <td><c:out value="${tweet.retweets}" /></td>
+								                <td><c:out value="${tweet.favoritos}" /></td>
+								            </tr>
+							        	</c:forEach>
+									</tbody>
+								</table>
                             </div>
                         </div>
                     </div>
@@ -128,12 +192,6 @@
                             </div>
                             <div class="panel-body chart-idiomas">
                                 <canvas id="chart-area" width="240" height="240"/>
-                            </div>
-
-                            <div class="leyenda">
-                                <div><i class="fa fa-square espanol"></i> Español</div>
-                                <div><i class="fa fa-square ingles"></i> Inglés</div>
-                                <div><i class="fa fa-square frances"></i> Francés</div>
                             </div>
                         </div>
                     </div>
@@ -169,34 +227,34 @@
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td class="cuenta"><img src="img/${top1.img}"><c:out value="${top1.nombre}" /></td>
-                                                <td><c:out value="${top1.seguidores}" /></td>
-                                                <td><c:out value="${contador1}" /></td>
-                                                <td><a href="${top1.link}">Link</a></td>
+                                                <td class="cuenta"><img src="${topAvatars[0]}"><c:out value="${topUsers[0]}" /></td>
+                                                <td><c:out value="${topFollowers[0]}" /></td>
+                                                <td><c:out value="${topFrecuencies[0]}" /></td>
+                                                <td><a target="_blank" href="${topLinks[0]}">Link</a></td>
                                             </tr>
                                             <tr>
-                                                <td class="cuenta"><img src="img/${top2.img}"><c:out value="${top2.nombre}" /></td>
-                                                <td><c:out value="${top2.seguidores}" /></td>
-                                                <td><c:out value="${contador2}" /></td>
-                                                <td><a href="${top2.link}">Link</a></td>
+                                                <td class="cuenta"><img src="${topAvatars[1]}"><c:out value="${topUsers[1]}" /></td>
+                                                <td><c:out value="${topFollowers[1]}" /></td>
+                                                <td><c:out value="${topFrecuencies[1]}" /></td>
+                                                <td><a target="_blank" href="${topLinks[1]}">Link</a></td>
                                             </tr>
                                             <tr>
-                                                <td class="cuenta"><img src="img/${top3.img}"><c:out value="${top3.nombre}" /></td>
-                                                <td><c:out value="${top3.seguidores}" /></td>
-                                                <td><c:out value="${contador3}" /></td>
-                                                <td><a href="${top3.link}">Link</a></td>
+                                                <td class="cuenta"><img src="${topAvatars[2]}"><c:out value="${topUsers[2]}" /></td>
+                                                <td><c:out value="${topFollowers[2]}" /></td>
+                                                <td><c:out value="${topFrecuencies[2]}" /></td>
+                                                <td><a target="_blank" href="${topLinks[2]}">Link</a></td>
                                             </tr>
                                             <tr>
-                                                <td class="cuenta"><img src="img/${top4.img}"><c:out value="${top4.nombre}" /></td>
-                                                <td><c:out value="${top4.seguidores}" /></td>
-                                                <td><c:out value="${contador4}" /></td>
-                                                <td><a href="${top4.link}">Link</a></td>
+                                                <td class="cuenta"><img src="${topAvatars[3]}"><c:out value="${topUsers[3]}" /></td>
+                                                <td><c:out value="${topFollowers[3]}" /></td>
+                                                <td><c:out value="${topFrecuencies[3]}" /></td>
+                                                <td><a target="_blank" href="${topLinks[3]}">Link</a></td>
                                             </tr>
                                             <tr>
-                                                <td class="cuenta"><img src="img/${top5.img}"><c:out value="${top5.nombre}" /></td>
-                                                <td><c:out value="${top5.seguidores}" /></td>
-                                                <td><c:out value="${contador5}" /></td>
-                                                <td><a href="${top5.link}">Link</a></td>
+                                                <td class="cuenta"><img src="${topAvatars[4]}"><c:out value="${topUsers[4]}" /></td>
+                                                <td><c:out value="${topFollowers[4]}" /></td>
+                                                <td><c:out value="${topFrecuencies[4]}" /></td>
+                                                <td><a target="_blank" href="${topLinks[4]}">Link</a></td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -215,14 +273,14 @@
                                     <table class="table table-bordered table-hover table-striped tabla-usuarios">
                                         <thead>
                                             <tr>
-                                                <th><i class="fa fa-heart"></i> Favorito</th>
-                                                <th><i class="fa fa-retweet"></i> Retweet</th>
+                                                <th><i class="fa fa-heart"></i> Favoritos</th>
+                                                <th><i class="fa fa-retweet"></i> Retweets</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                             <tr>
-                                                <td><c:out value="${favoritos}" /></td>
-                                                <td><c:out value="${retweets}" /></td>
+                                                <td><c:out value="${favsCount}" /></td>
+                                                <td><c:out value="${retweetsCount}" /></td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -246,6 +304,9 @@
 
     <!-- Bootstrap Core JavaScript -->
     <script src="js/bootstrap.min.js"></script>
+    
+    <!-- DataTable -->
+    <script src="https://cdn.datatables.net/1.10.11/js/jquery.dataTables.min.js"></script>
 
     <!-- Morris Charts JavaScript -->
     <script src="js/plugins/morris/raphael.min.js"></script>
@@ -254,8 +315,34 @@
     <!-- Charts -->
     <script src="js/plugins/chart/Chart.min.js"></script>
     
-    <!-- Area Chart -->
+    <!-- Table of tweets -->
     <script type="text/javascript">
+	    $(document).ready(function() {
+	        $('#data').DataTable({
+	        	"scrollY": 400,
+	            "scrollX": true,
+	            "language": {
+	                "lengthMenu": "Mostrar _MENU_ resultados",
+	                "zeroRecords": "Sin resultados",
+	                "info": "Página _PAGE_ de _PAGES_",
+	                "infoEmpty": "No hay registros disponibles",
+	                "infoFiltered": "(filtrado de _MAX_ resultados totales)",
+	                "loadingRecords": "Cargando...",
+	                "processing":     "Procesando...",
+	                "paginate": {
+	                    "first":      "Primero",
+	                    "last":       "Último",
+	                    "next":       "Siguiente",
+	                    "previous":   "Anterior"
+	                },
+	                "search": "Buscar:",
+	            }
+	        });
+	    } );
+    </script>
+    
+    <!-- Area Chart -->
+    <!--<script type="text/javascript">
     	var data = [];
     	var intervalos = "${intervalos}";
     	
@@ -297,53 +384,58 @@
 	        lineColors: ['#337AB7']
 	        //'#5cb85c', '#f0ad4e', '#d9534f', '#FF8000', '#AC58FA', '#0404B4', '#088A08'
 	    });
-    </script>
+    </script>-->
     
+    <!-- Idiomas -->
     <script type="text/javascript">
-    	var pieData = [
-	        {
-	            value: "${tweetsEspanol}",
-	            color:"#F7464A",
-	            highlight: "#E64043",
-	            label: "Español"
-	        },
-	        {
-	            value: "${tweetsIngles}",
-	            color: "#01DF01",
-	            highlight: "#00B200",
-	            label: "Inglés"
-	        },
-	        {
-	            value: "${tweetsFrances}",
-	            color: "#2251EB",
-	            highlight: "#183DB4",
-	            label: "Francés"
-	        }
-	    ];
-	
+   		var pieData = [];
+   		var languagesLength = "${languagesLength}";
+   		var languages = [];
+   		var colors = [];
+   		var highlightColors = [];
+   		
+   		<c:forEach items="${languages}" var="i">
+			languages.push("${i}");
+		</c:forEach>
+		<c:forEach items="${colors}" var="i">
+			colors.push("${i}");
+		</c:forEach>
+		<c:forEach items="${highlightColors}" var="i">
+			highlightColors.push("${i}");
+		</c:forEach>*/
+		
+   		for(var i = 0; i < languagesLength; i++) {
+			pieData.push({
+				value: languages[i],
+				color: colors[i],
+				highlight: highlightColors[i],
+	            label: languages[i]
+    		});
+    	}
+   			
 	    window.onload = function(){
 	        var ctx = document.getElementById("chart-area").getContext("2d");
 	        window.myPie = new Chart(ctx).Pie(pieData);
 	    };
     </script>
     
-    <!-- Bar Chart -->
-    <script type="text/javascript">
+    <!-- Bar Chart - Localización -->
+    <!--<script type="text/javascript">
     
 	    Morris.Bar({
 	        element: 'morris-bar-chart',
 	        data: [{
 	            city: 'Madrid',
-	            value: "${tweetsMadrid}"
+	            value: "Madrid"
 	        }, {
 	            city: 'Barcelona',
-	            value: "${tweetsBarcelona}"
+	            value: "Madrid"
 	        }, {
 	            city: 'Sevilla',
-	            value: "${tweetsSevilla}"
+	            value: "Madrid"
 	        }, {
 	            city: 'Toledo',
-	            value: "${tweetsToledo}"
+	            value: "Madrid"
 	        }],
 	        xkey: 'city',
 	        ykeys: ['value'],
@@ -354,7 +446,7 @@
 	        hideHover: 'auto',
 	        resize: true
 	    });
-    </script>
+    </script>-->
 
 </body>
 

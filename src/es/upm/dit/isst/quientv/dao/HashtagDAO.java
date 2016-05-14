@@ -8,7 +8,7 @@ public interface HashtagDAO {
 	
 public Hashtag newHashtag(String nombre);
 	
-	public Hashtag getHashtag(int id);
+	public Hashtag getHashtag(String id);
 	
 	public List<Hashtag> getHashtagList();
 	

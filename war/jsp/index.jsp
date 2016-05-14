@@ -63,21 +63,21 @@
                         <a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="fa fa-fw fa-list"></i> Hashtags <i class="fa fa-fw fa-caret-down"></i></a>
                         <ul id="demo" class="collapse">
                             <li>
-                                <a href="hashtag1"><i class="fa fa-hashtag"></i> Hashtag1</a>
+                                <a href="hashtagDetail?id=${hashtag1.id}"><i class="fa fa-hashtag"></i> <c:out value="${hashtag1.nombre}" /></a>
                             </li>
                             <c:if test="${not empty hashtag2}">                                          
 	                            <li>
-	                                <a href="hashtag2"><i class="fa fa-hashtag"></i> Hashtag2</a>
+	                                <a href="hashtagDetail?id=${hashtag2.id}"><i class="fa fa-hashtag"></i> <c:out value="${hashtag2.nombre}" /></a>
 	                            </li>
                             </c:if>
                             <c:if test="${not empty hashtag3}">
 	                            <li>
-	                                <a href="hashtag3"><i class="fa fa-hashtag"></i> Hashtag3</a>
+	                                <a href="hashtagDetail?id=${hashtag3.id}"><i class="fa fa-hashtag"></i> <c:out value="${hashtag3.nombre}" /></a>
 	                            </li>
                             </c:if>
                             <c:if test="${not empty hashtag4}">
 	                            <li>
-	                                <a href="hashtag4"><i class="fa fa-hashtag"></i> Hashtag4</a>
+	                                <a href="hashtagDetail?id=${hashtag4.id}"><i class="fa fa-hashtag"></i> <c:out value="${hashtag4.nombre}" /></a>
 	                            </li>
                             </c:if>
                         </ul>
@@ -126,7 +126,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <a href="hashtag1">
+                            <a href="hashtagDetail?id=${hashtag1.id}">
                                 <div class="panel-footer">
                                     <span class="pull-left">Ver detalles</span>
                                     <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -148,7 +148,7 @@
 	                                    </div>
 	                                </div>
 	                            </div>
-	                            <a href="hashtag2">
+	                            <a href="hashtagDetail?id=${hashtag2.id}">
 	                                <div class="panel-footer">
 	                                    <span class="pull-left">Ver detalles</span>
 	                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -171,7 +171,7 @@
 	                                    </div>
 	                                </div>
 	                            </div>
-	                            <a href="hashtag3">
+	                            <a href="hashtagDetail?id=${hashtag3.id}">
 	                                <div class="panel-footer">
 	                                    <span class="pull-left">Ver detalles</span>
 	                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -194,7 +194,7 @@
 	                                    </div>
 	                                </div>
 	                            </div>
-	                            <a href="hashtag4">
+	                            <a href="hashtagDetail?id=${hashtag4.id}">
 	                                <div class="panel-footer">
 	                                    <span class="pull-left">Ver detalles</span>
 	                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>

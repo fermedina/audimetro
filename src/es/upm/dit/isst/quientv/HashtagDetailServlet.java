@@ -1,9 +1,12 @@
 package es.upm.dit.isst.quientv;
 
 import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
+import java.util.Set;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -13,17 +16,176 @@ import javax.servlet.http.HttpServletResponse;
 
 import es.upm.dit.isst.quientv.dao.HashtagDAO;
 import es.upm.dit.isst.quientv.dao.HashtagDAOImpl;
+import es.upm.dit.isst.quientv.dao.TweetDAO;
+import es.upm.dit.isst.quientv.dao.TweetDAOImpl;
 import es.upm.dit.isst.quientv.model.Hashtag;
+import es.upm.dit.isst.quientv.model.Tweet;
 
 @SuppressWarnings("serial")
-public class Hashtag4Servlet extends HttpServlet {
+public class HashtagDetailServlet extends HttpServlet {
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
 		resp.setContentType("text/plain");
 		
-		/*HashtagDAO hashtagDao = HashtagDAOImpl.getInstance();
-		Hashtag hashtag = hashtagDao.getHashtagList().get(3);
-		req.setAttribute("hashtag", hashtag);
+		// Id del hashtag recibido como parámetro en la URL
+		String hashtagId = req.getParameter("id");
 		
+		// Instancias de los DAOs
+		HashtagDAO hashtagDao = HashtagDAOImpl.getInstance();
+		TweetDAO tweetDao = TweetDAOImpl.getInstance();
+		
+		// Obtenemos el objeto Hashtag con el Id del hashtag recibido como parámetro
+		Hashtag hashtagSelected = hashtagDao.getHashtag(hashtagId);
+		req.setAttribute("hashtag", hashtagSelected);
+		
+		// Obtenemos la lista de los hashtags guardados
+		List<Hashtag> hashtags = hashtagDao.getHashtagList();
+		
+		if (hashtags.size() > 0) {
+			Hashtag hashtag1 = hashtags.get(0);
+			Hashtag hashtag2 = null;
+			Hashtag hashtag3 = null;
+			Hashtag hashtag4 = null;
+			
+			if (hashtags.size() == 2) {
+				hashtag2 = hashtags.get(1);
+			}
+			if (hashtags.size() == 3) {
+				hashtag2 = hashtags.get(1);
+				hashtag3 = hashtags.get(2);
+			}
+			if (hashtags.size() == 4) {
+				hashtag2 = hashtags.get(1);
+				hashtag3 = hashtags.get(2);
+				hashtag4 = hashtags.get(3);
+			}
+			
+			req.setAttribute("hashtag1", hashtag1);
+			req.setAttribute("hashtag2", hashtag2);
+			req.setAttribute("hashtag3", hashtag3);
+			req.setAttribute("hashtag4", hashtag4);			
+		}
+		
+		// Obtenemos la lista de los tweets puestos con el hashtag recibido como parámetro
+		List<Tweet> tweetsOfHashtag = tweetDao.getTweetListByHashtagId(hashtagId);	
+		req.setAttribute("tweetList", tweetsOfHashtag);
+		
+		// Obtenemos los idiomas de los tweets que contienen el hashtag recibido como parámetro
+		// Obtenemos la cuenta de retweets y favoritos totales
+		ArrayList<String> languages = new ArrayList<String>();
+		int retweetsCount = 0;
+		int favsCount = 0;
+		ArrayList<String> users = new ArrayList<String>();
+		ArrayList<String> links = new ArrayList<String>();
+		ArrayList<Integer> followers = new ArrayList<Integer>();
+		ArrayList<String> avatars = new ArrayList<String>();
+		for(Tweet tweet : tweetsOfHashtag) {
+			retweetsCount += tweet.getRetweets();
+			favsCount += tweet.getFavoritos();
+			
+			Locale locale = new Locale(tweet.getIdioma());
+			String displayLanguage = locale.getDisplayLanguage();
+			String languageCapitalized = Character.toUpperCase(displayLanguage.charAt(0)) + displayLanguage.substring(1);
+			
+			if (!(languageCapitalized.equals("Indeterminada")) && !languages.contains(languageCapitalized)) {			
+				languages.add(languageCapitalized);
+			}
+			
+			users.add(tweet.getUsuario());
+			links.add(tweet.getLinkProfile());
+			followers.add(tweet.getSeguidoresUsuario());
+			avatars.add(tweet.getAvatar());
+		}
+		
+		String[] colors = {"#F7464A", "#01DF01", "#2251EB", "#EDF904", "#F904F5"};
+		String[] highlightColors = {"#E64043", "#00B200", "#2251EB", "#F4FB6D", "#FA73F8"};
+		
+		req.setAttribute("languagesLength", languages.size());
+		req.setAttribute("languages", languages);
+		req.setAttribute("colors", colors);
+		req.setAttribute("highlightColors", highlightColors);
+		
+		req.setAttribute("retweetsCount", retweetsCount);
+		req.setAttribute("favsCount", favsCount);
+				
+		Set<String> mySet = new HashSet<String>(users);
+		ArrayList<String> topUsers = new ArrayList<String>();
+		ArrayList<Integer> frecuencies = new ArrayList<Integer>();
+		for(String s: mySet){
+			topUsers.add(s);
+			frecuencies.add(Collections.frequency(users,s));			
+		}
+		
+		for(int i = 0; i<frecuencies.size() - 1; i++){
+            for(int j=i+1; j<frecuencies.size(); j++){
+                if(frecuencies.get(i) < frecuencies.get(j)){
+                    //Intercambiamos valores
+                    String variableAuxiliar1 = topUsers.get(i);
+                    int variableAuxiliar2 = frecuencies.get(i);
+                    String variableAuxiliar3 = links.get(i);
+                    int variableAuxiliar4 = followers.get(i);
+                    String variableAuxiliar5 = avatars.get(i);
+                                                         
+                    topUsers.set(i, topUsers.get(j));
+                    topUsers.set(j, variableAuxiliar1);
+                    frecuencies.set(i, frecuencies.get(j));
+                    frecuencies.set(j, variableAuxiliar2);
+                    links.set(i, links.get(j));
+                    links.set(j, variableAuxiliar3);
+                    followers.set(i, followers.get(j));
+                    followers.set(j, variableAuxiliar4);
+                    avatars.set(i, avatars.get(j));
+                    avatars.set(j, variableAuxiliar5);
+                }
+            }
+        }
+		
+		req.setAttribute("topUsers", topUsers);
+		req.setAttribute("topFrecuencies", frecuencies);
+		req.setAttribute("topLinks", links);
+		req.setAttribute("topFollowers", followers);
+		req.setAttribute("topAvatars", avatars);
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		/*
 		int retweets = 0;
 		
 		int favoritos = 0;
@@ -172,8 +334,8 @@ public class Hashtag4Servlet extends HttpServlet {
 		req.setAttribute("contador3", contadores[2]);
 		req.setAttribute("contador4", contadores[3]);
 		req.setAttribute("contador5", contadores[4]);
-		
-		RequestDispatcher view = req.getRequestDispatcher("/jsp/hashtag4.jsp");
-		view.forward(req, resp);*/
+		*/
+		RequestDispatcher view = req.getRequestDispatcher("/jsp/hashtagDetail.jsp");
+		view.forward(req, resp);
 	}
 }

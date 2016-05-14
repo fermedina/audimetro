@@ -34,7 +34,7 @@ public class HashtagDAOImpl implements HashtagDAO {
 	}
 
 	@Override
-	public Hashtag getHashtag(int id) {
+	public Hashtag getHashtag(String id) {
 		EntityManager em = EMFService.get().createEntityManager();
 		Query q = em.createQuery("select h from Hashtag h where h.id = :id");
 		q.setParameter("id", id);
