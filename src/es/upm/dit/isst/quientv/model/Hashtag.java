@@ -22,11 +22,15 @@ public class Hashtag implements Serializable {
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createdat;
+	private Date fechaInicio;
+	private Date fechaFin;
 		
-	public Hashtag(String nombre) {
+	public Hashtag(String nombre, Date fechaInicio, Date fechaFin) {
 		this.id = UUID.randomUUID().toString();
 		this.nombre = nombre;
 		this.createdat = new Date();
+		this.fechaInicio = fechaInicio;
+		this.fechaFin = fechaFin;
 	}
 	
 	public String getId() {
@@ -43,6 +47,14 @@ public class Hashtag implements Serializable {
 	
 	public Date getCreatedAt() {
 		return createdat;
+	}
+	
+	public Date getFechaInicio() {
+		return fechaInicio;
+	}
+	
+	public Date getFechaFin() {
+		return fechaFin;
 	}
 
 	public void setCreatedAt(Date createdat) {
