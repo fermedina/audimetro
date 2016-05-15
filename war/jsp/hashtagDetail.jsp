@@ -389,24 +389,21 @@
     <!-- Idiomas -->
     <script type="text/javascript">
     
-    var pieData = [];
-       var languagesLength = "${languagesLength}";
-       var languages = [];
-       var colors = [];
-       var highlightColors = [];
+    	var pieData = [];
+       	var languages = [];
+       	var languageFrecuencies = [];
+    	var colors = ["#F7464A", "#01DF01", "#2251EB", "#EDF904", "#F904F5", "#05F7FB", "#F6C30A", "#07F096", "#F20684"];
+		var highlightColors = ["#E64043", "#00B200", "#2251EB", "#F4FB6D", "#FA73F8", "#90F7F9", "#F8D865", "#78F2C3", "#F27EBC"];
        
-       <c:forEach items="${languages}" var="i">
-	    	languages.push("${i}");
-	    </c:forEach>
-	    <c:forEach items="${colors}" var="i">
-	    	colors.push("${i}");
-	    </c:forEach>
-	    <c:forEach items="${highlightColors}" var="i">
-	    	highlightColors.push("${i}");
-	    </c:forEach>
+      	<c:forEach items="${languages}" var="i">
+	   		languages.push("${i}");
+	   	</c:forEach>
+	   	<c:forEach items="${languageFrecuencies}" var="i">
+	   		languageFrecuencies.push("${i}");
+   		</c:forEach>
 
-       for(var i = 0; i < languagesLength; i++) {
-		    pieData.push({
+       	for(var i = 0; i < languages.length; i++) {
+			pieData.push({
 		    	value: languages[i],
 		    	color: colors[i],
 		    	highlight: highlightColors[i],
@@ -420,7 +417,7 @@
     	    labels: languages,
     	    datasets: [
     	        {
-    	            data: [300, 200, 100],
+    	            data: languageFrecuencies,
     	            backgroundColor: colors,
     	            hoverBackgroundColor: highlightColors
     	        }]
