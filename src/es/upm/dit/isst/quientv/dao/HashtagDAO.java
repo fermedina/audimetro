@@ -17,6 +17,6 @@ public Hashtag newHashtag(String nombre, Date fechaInicio, Date fechaFin);
 	
 	public void deleteHashtag(String id);
 
-	public List<Hashtag> getHashtagListInSearchPeriod(String moment);
+	public List<Hashtag> getHashtagListInSearchPeriod();
 
 }

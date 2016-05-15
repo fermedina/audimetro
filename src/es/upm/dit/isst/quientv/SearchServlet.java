@@ -12,6 +12,7 @@ import es.upm.dit.isst.quientv.dao.HashtagDAO;
 import es.upm.dit.isst.quientv.dao.HashtagDAOImpl;
 import es.upm.dit.isst.quientv.dao.TweetDAO;
 import es.upm.dit.isst.quientv.dao.TweetDAOImpl;
+import es.upm.dit.isst.quientv.model.Hashtag;
 import es.upm.dit.isst.quientv.model.Tweet;
 import twitter4j.Query;
 import twitter4j.QueryResult;
@@ -43,11 +44,13 @@ public class SearchServlet extends HttpServlet {
 		ArrayList<Tweet> insertedTweets = new ArrayList<Tweet>();
 		String urlTwitter = "https://twitter.com/";
 		
-		System.out.println(hashtagDao.getHashtagListInSearchPeriod("inicio"));
-		System.out.println(hashtagDao.getHashtagListInSearchPeriod("fin"));
-		
+		// Obtenemos los tweets almacenados y los borramos antes de guardar los nuevos
+		for(Tweet tweet: tweetDao.getTweetList()) {
+			tweetDao.deleteTweet(tweet.getId());
+		};
+				
 		//TODO Comparar listas
-		/*for (int i = 0; i < hashtagDao.getHashtagListInSearchPeriod().size(); i++) {
+		for (int i = 0; i < hashtagDao.getHashtagListInSearchPeriod().size(); i++) {
 			Query query = new Query("#" + hashtagDao.getHashtagListInSearchPeriod().get(i).getNombre());
 			query.setCount(100);
 
@@ -61,7 +64,8 @@ public class SearchServlet extends HttpServlet {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}*/
+		}
+		
 		RequestDispatcher view = req.getRequestDispatcher("/jsp/add.jsp");
 		view.forward(req, resp);
 	}

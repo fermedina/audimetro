@@ -60,7 +60,7 @@ public class HashtagDAOImpl implements HashtagDAO {
 	}
 	
 	@Override
-	public List<Hashtag> getHashtagListInSearchPeriod(String moment) {
+	public List<Hashtag> getHashtagListInSearchPeriod() {
 		EntityManager em = EMFService.get().createEntityManager();
 		Date now = new Date();
 		Query q = null;
