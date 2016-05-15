@@ -31,7 +31,6 @@ public class IndexServlet extends HttpServlet {
 		List<Hashtag> hashtags = hashtagDao.getHashtagList();
 		List<Tweet> insertedTweets = tweetDao.getTweetList();
 
-
 		if (hashtags.size() > 0) {
 			Hashtag hashtag1 = hashtags.get(0);
 			Hashtag hashtag2 = null;
@@ -140,25 +139,16 @@ public class IndexServlet extends HttpServlet {
 
 			try {
 				dateFin = df.parse(horaFin);
-				long intervalSize = 1800000; //30 minutos en milisegundos
-				long maxTime = dateFin.getTime(); //Hora fin en milisegundos
 
 				//Date dateInicio = h1.getCreatedAt(); // Momento de inicio de la búsqueda
 				Date dateInicio = new Date();
-				long minTime = dateInicio.getTime(); //Hora inicio en milisegundos
-
-				// Calculamos la cantidad de intervalos de 30 minutos entre la fecha de inicio y la de fin
-				int intervalQuantities = Math.abs((int)((maxTime - minTime) / intervalSize)); 
+				
 				// Guardamos los nuevos hashtags
+				hashtagDao.newHashtag(hashtag1, dateInicio, dateFin);
 
-				Hashtag h1 = hashtagDao.newHashtag(hashtag1, dateInicio, dateFin);
-				Hashtag h2 = null;
-				Hashtag h3 = null;
-				Hashtag h4 = null;
-
-				if (!hashtag2.isEmpty()) { h2 = hashtagDao.newHashtag(hashtag2, dateInicio, dateFin); }
-				if (!hashtag3.isEmpty()) { h3 = hashtagDao.newHashtag(hashtag3, dateInicio, dateFin); }
-				if (!hashtag4.isEmpty()) { h4 = hashtagDao.newHashtag(hashtag4, dateInicio, dateFin); }
+				if (!hashtag2.isEmpty()) { hashtagDao.newHashtag(hashtag2, dateInicio, dateFin); }
+				if (!hashtag3.isEmpty()) { hashtagDao.newHashtag(hashtag3, dateInicio, dateFin); }
+				if (!hashtag4.isEmpty()) { hashtagDao.newHashtag(hashtag4, dateInicio, dateFin); }
 
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
