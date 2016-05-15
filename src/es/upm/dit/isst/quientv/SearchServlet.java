@@ -1,12 +1,18 @@
 package es.upm.dit.isst.quientv;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.TimeZone;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
+
+import org.apache.commons.io.IOUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import es.upm.dit.isst.quientv.dao.HashtagDAO;
 import es.upm.dit.isst.quientv.dao.HashtagDAOImpl;
@@ -58,7 +64,7 @@ public class SearchServlet extends HttpServlet {
 				QueryResult result = twitter.search(query);
 
 				for (Status status : result.getTweets()) {
-					insertedTweets.add(tweetDao.newTweet(hashtagDao.getHashtagList().get(i).getId(), status.getText(), status.getLang(), status.getUser().getLocation(), status.getUser().getScreenName(), urlTwitter + status.getUser().getScreenName(), status.getUser().getProfileImageURL(), status.getUser().getFollowersCount(), status.getRetweetCount(), status.getFavoriteCount()));
+					insertedTweets.add(tweetDao.newTweet(hashtagDao.getHashtagList().get(i).getId(), status.getText(), status.getLang(), getProvincia(status.getGeoLocation().getLatitude(), status.getGeoLocation().getLongitude()), status.getUser().getScreenName(), urlTwitter + status.getUser().getScreenName(), status.getUser().getProfileImageURL(), status.getUser().getFollowersCount(), status.getRetweetCount(), status.getFavoriteCount()));
 				}
 			} catch (TwitterException e) {
 				// TODO Auto-generated catch block
@@ -68,6 +74,41 @@ public class SearchServlet extends HttpServlet {
 		
 		RequestDispatcher view = req.getRequestDispatcher("/jsp/add.jsp");
 		view.forward(req, resp);
+	}
+	
+	public static String getProvincia(double lat, double lon) throws MalformedURLException, IOException{
+		String key = "AIzaSyB0tRpeEfOEvt7X5i8TKKXOWzGqLsQh9_E";
+		String urlString = "https://maps.googleapis.com/maps/api/geocode/json";
+		urlString += "?latlng=" + lat + "," + lon;
+		urlString += "&key=" + key;
+		
+		String placeJson = IOUtils.toString(new URL(urlString), "UTF-8");
+		JSONObject json = new JSONObject(placeJson);
+		
+		//Si no se obtienen resultados
+		if(!json.get("status").equals("OK")){
+			return "Indifinida";
+		}
+		
+		//Obtiene el elemento results
+		JSONArray results = (JSONArray) json.get("results");
+		
+		//Obtiene el primer elemento de results
+		JSONObject resultsObj = (JSONObject)results.getJSONObject(0);
+		
+		//Obtiene los valores de address_components
+		JSONArray address_components = (JSONArray)resultsObj.getJSONArray("address_components");
+		
+		//Recorre address_components para buscar el valor deseado para la provincia
+		for(int i = 0; i < address_components.length(); i++){		
+			JSONObject addressObj = (JSONObject)address_components.getJSONObject(i);
+			JSONArray array = (JSONArray) addressObj.get("types");
+			
+			if (array.get(0).equals("administrative_area_level_2")){
+				return addressObj.get("long_name").toString();
+			}
+		}
+		return "Indefinida";
 	}
 }
 
