@@ -252,6 +252,20 @@
    		});
     
     </script>
+    
+    <script type="text/javascript">
+    	$("#target").submit(function(event) {
+    		if($("#fin").val() && $("#select_franja").val()) {
+    			alert("Por favor elija sólo un método para iniciar la búsqueda");
+    			event.preventDefault();
+    		}
+    		
+    		if(!$("#fin").val() && !$("#select_franja").val()) {
+    			alert("Por favor elija al menos un método para iniciar la búsqueda");
+    			event.preventDefault();
+    		}
+    	});
+    </script>
 
 </body>
 
