@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cronentries>
 	<cron>
-		<url>/limpiaTFGs</url>
-		<description>Borra los TFG obsoletos</description>
-		<schedule>every day 00:00</schedule>
+		<url>/search</url>
+		<description>Busca info de los tweets</description>
+		<schedule>every 1 minutes</schedule>
   	</cron>
 </cronentries>
