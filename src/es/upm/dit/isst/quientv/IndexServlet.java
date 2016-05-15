@@ -145,6 +145,7 @@ public class IndexServlet extends HttpServlet {
 
 				//Date dateInicio = h1.getCreatedAt(); // Momento de inicio de la búsqueda
 				Date dateInicio = new Date();
+				dateInicio.setSeconds(dateInicio.getSeconds() - 30);
 				long minTime = dateInicio.getTime(); //Hora inicio en milisegundos
 
 				// Calculamos la cantidad de intervalos de 30 minutos entre la fecha de inicio y la de fin
@@ -164,9 +165,12 @@ public class IndexServlet extends HttpServlet {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			
+			RequestDispatcher rd= req.getRequestDispatcher("/search");
+			rd.include(req, resp);
 
-			RequestDispatcher view = req.getRequestDispatcher("/jsp/index.jsp");
-			view.forward(req, resp);
+			/*RequestDispatcher view = req.getRequestDispatcher("/jsp/index.jsp");
+			view.forward(req, resp);*/
 		}
 	}
 }

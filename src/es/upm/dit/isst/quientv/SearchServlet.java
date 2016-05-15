@@ -24,7 +24,7 @@ import twitter4j.conf.ConfigurationBuilder;
 @SuppressWarnings("serial")
 public class SearchServlet extends HttpServlet {
 
-	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
 		HashtagDAO hashtagDao = HashtagDAOImpl.getInstance();
 		TweetDAO tweetDao = TweetDAOImpl.getInstance();
 
@@ -42,8 +42,12 @@ public class SearchServlet extends HttpServlet {
 
 		ArrayList<Tweet> insertedTweets = new ArrayList<Tweet>();
 		String urlTwitter = "https://twitter.com/";
-
-		for (int i = 0; i < hashtagDao.getHashtagListInSearchPeriod().size(); i++) {
+		
+		System.out.println(hashtagDao.getHashtagListInSearchPeriod("inicio"));
+		System.out.println(hashtagDao.getHashtagListInSearchPeriod("fin"));
+		
+		//TODO Comparar listas
+		/*for (int i = 0; i < hashtagDao.getHashtagListInSearchPeriod().size(); i++) {
 			Query query = new Query("#" + hashtagDao.getHashtagListInSearchPeriod().get(i).getNombre());
 			query.setCount(100);
 
@@ -57,8 +61,8 @@ public class SearchServlet extends HttpServlet {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}
-		RequestDispatcher view = req.getRequestDispatcher("/jsp/index.jsp");
+		}*/
+		RequestDispatcher view = req.getRequestDispatcher("/jsp/add.jsp");
 		view.forward(req, resp);
 	}
 }
