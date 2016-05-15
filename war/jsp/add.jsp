@@ -106,7 +106,7 @@
                 <!-- /.row -->
 
                 <div class="row add-hashtag">
-                    <form action="/index" method="post" acceptcharset="utf-8">
+                    <form id="target" action="/index" method="post" acceptcharset="utf-8">
                         <div class="col-lg-12">
                             <label>Seleccione cuatro Hashtag a monitorizar</label>
                         </div>
@@ -143,22 +143,36 @@
 
                             <div class="form-group">
                                 <label>Seleccione la franja horaria</label>
-                                <select class="form-control">
+                                <select class="form-control" id="select_franja" name="franja_horaria">
                                     <option></option>
-                                    <option>Despertador: 7:30 a las 9 h</option>
-                                    <option>Matinal: 9 a 13 h</option>
-                                    <option>Access Sobremesa: 13 a 15 h</option>
-                                    <option>Sobremesa: 15 a 18 h</option>
-                                    <option>Tarde: 18 a 20 h</option>
-                                    <option>Access Prime-Time: 20 a 21 h</option>
-                                    <option>Prime-Time: 21 a 24 h</option>
-                                    <option>Latenight : 24 a 2:30 h</option>
-                                    <option>Madrugada: 2:30 a 7:30 h</option>
+                                    <option value="despertador">Despertador: 7:30 a las 9 h</option>
+                                    <option value="matinal">Matinal: 9 a 13 h</option>
+                                    <option value="access_sobremesa">Access Sobremesa: 13 a 15 h</option>
+                                    <option value="sobremesa">Sobremesa: 15 a 18 h</option>
+                                    <option value="tarde">Tarde: 18 a 20 h</option>
+                                    <option value="access_prime_time">Access Prime-Time: 20 a 21 h</option>
+                                    <option value="prime_time">Prime-Time: 21 a 24 h</option>
+                                    <option value="latenight">Latenight : 24 a 2:30 h</option>
+                                    <option value="madrugada">Madrugada: 2:30 a 7:30 h</option>
                                 </select>
                             </div>
-
-                            <button type="submit" disabled class="btn btn-success">Guardar</button>
-
+                            
+                            <div class="col-lg-4 franja_horas" style="display: none">
+                            	<div class="form-group">
+	                                <div class="form-group input-group">
+	                                    <span class="input-group-addon"><i class="fa fa-clock-o"></i> Inicio</span>
+	                                    <input type="datetime-local" id="fecha_inicio" name="fecha_inicio" value="" class="form-control">
+	                                </div>
+	                            </div>
+	                            
+	                            <div class="form-group">
+	                                <div class="form-group input-group">
+	                                    <span class="input-group-addon"><i class="fa fa-clock-o"></i> Fin</span>
+	                                    <input type="datetime-local" id="fecha_fin" name="fecha_fin" value="" class="form-control">
+	                                </div>
+	                            </div>
+                            </div>
+                            
                         </div>
                         <div class="col-lg-6 franja">
                             <label>Seleccione la hora de fin</label>
@@ -168,11 +182,15 @@
                             <div class="form-group">
                                 <div class="form-group input-group">
                                     <span class="input-group-addon"><i class="fa fa-clock-o"></i></span>
-                                    <input type="datetime-local" name="hora_fin" required value="" class="form-control">
+                                    <input type="datetime-local" id="fin" name="hora_fin" value="" class="form-control">
                                 </div>
                             </div>
-
-                            <button type="submit" class="btn btn-info">Activar</button>
+                        </div>
+                        
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <button type="submit" class="btn btn-success">Guardar</button>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -192,6 +210,48 @@
 
     <!-- Bootstrap Core JavaScript -->
     <script src="js/bootstrap.min.js"></script>
+    
+    <script type="text/javascript">
+	    var today = new Date();
+	    var dd = today.getDate();
+	    var mm = today.getMonth()+1; //January is 0!
+	    var yyyy = today.getFullYear();
+	
+	    if(dd<10) {
+	        dd='0'+dd
+	    } 
+	
+	    if(mm<10) {
+	        mm='0'+mm
+	    } 
+	
+	    today = yyyy+'-'+mm+'-'+dd;
+	    
+	    var select = {
+	    	"despertador": ["07:30", "09:00"], 
+	    	"matinal": ["09:00", "13:00"], 
+	    	"access_sobremesa": ["13:00", "15:00"], 
+	    	"sobremesa": ["15:00", "18:00"], 
+	    	"tarde": ["18:00", "20:00"], 
+	    	"access_prime_time": ["20:00", "21:00"], 
+	    	"prime_time": ["21:00", "23:59"], 
+	    	"latenight": ["00:00", "02:30"], 
+	    	"madrugada": ["02:30", "07:30"]
+	    };
+	    
+    	$("#select_franja").change(function() {
+    		var franja = $("#select_franja").val();
+    		
+    		if (franja) {
+        		$(".franja_horas").show();
+        		$("#fecha_inicio").val(today+"T"+select[franja][0]);
+        		$("#fecha_fin").val(today+"T"+select[franja][1]);
+        	} else {
+        		$(".franja_horas").hide();
+        	}
+   		});
+    
+    </script>
 
 </body>
 
