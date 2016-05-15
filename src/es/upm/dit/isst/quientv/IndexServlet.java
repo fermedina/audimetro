@@ -19,7 +19,6 @@ import es.upm.dit.isst.quientv.dao.TweetDAOImpl;
 import es.upm.dit.isst.quientv.model.Hashtag;
 import es.upm.dit.isst.quientv.model.Tweet;
 
-
 @SuppressWarnings("serial")
 public class IndexServlet extends HttpServlet {
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
@@ -120,12 +119,17 @@ public class IndexServlet extends HttpServlet {
 		String hashtag3 = req.getParameter("hashtag3");
 		String hashtag4 = req.getParameter("hashtag4");
 
-		String horaFin = req.getParameter("hora_fin");
+		String horaFinInput = req.getParameter("hora_fin");		
+		String franjaHorariaInicio = req.getParameter("fecha_inicio");
+		String franjaHorariaFin = req.getParameter("fecha_fin");
+		
+		Date dateInicio; // Momento de inicio de la búsqueda
+		Date dateFin; // Momento de fin de la búsqueda
+		
+		TimeZone.setDefault(TimeZone.getTimeZone("GMT+2:00"));
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");		
 
 		HashtagDAO hashtagDao = HashtagDAOImpl.getInstance();
-		TweetDAO tweetDao = TweetDAOImpl.getInstance();
-
-		TimeZone.setDefault(TimeZone.getTimeZone("GMT+2:00"));
 
 		if (hashtag1 != null) {
 
@@ -134,15 +138,15 @@ public class IndexServlet extends HttpServlet {
 				hashtagDao.deleteHashtag(hashtag.getId());
 			};
 
-			SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
-			Date dateFin; // Momento de fin de la búsqueda
-
-			try {
-				dateFin = df.parse(horaFin);
-
-				//Date dateInicio = h1.getCreatedAt(); // Momento de inicio de la búsqueda
-				Date dateInicio = new Date();
-				
+			try {			
+				if (!franjaHorariaInicio.isEmpty() && !franjaHorariaFin.isEmpty()) {
+					dateInicio = df.parse(franjaHorariaInicio);
+					dateFin = df.parse(franjaHorariaFin);
+				} else {
+					dateInicio = new Date();
+					dateFin = df.parse(horaFinInput);
+				}
+								
 				// Guardamos los nuevos hashtags
 				hashtagDao.newHashtag(hashtag1, dateInicio, dateFin);
 
@@ -155,11 +159,13 @@ public class IndexServlet extends HttpServlet {
 				e.printStackTrace();
 			}
 			
-			RequestDispatcher rd= req.getRequestDispatcher("/search");
-			rd.include(req, resp);
-
-			/*RequestDispatcher view = req.getRequestDispatcher("/jsp/index.jsp");
-			view.forward(req, resp);*/
+			if (!horaFinInput.isEmpty()) {
+				RequestDispatcher rd= req.getRequestDispatcher("/search");
+				rd.include(req, resp);
+			} else {
+				RequestDispatcher view = req.getRequestDispatcher("/jsp/add.jsp");
+				view.forward(req, resp);
+			}		
 		}
 	}
 }
