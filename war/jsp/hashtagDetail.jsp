@@ -392,8 +392,8 @@
     	var pieData = [];
        	var languages = [];
        	var languageFrecuencies = [];
-    	var colors = ["#F7464A", "#01DF01", "#2251EB", "#EDF904", "#F904F5", "#05F7FB", "#F6C30A", "#07F096", "#F20684"];
-		var highlightColors = ["#E64043", "#00B200", "#2251EB", "#F4FB6D", "#FA73F8", "#90F7F9", "#F8D865", "#78F2C3", "#F27EBC"];
+    	var colors = ["#F7464A", "#01DF01", "#2251EB", "#EDF904", "#F904F5", "#05F7FB", "#F6C30A", "#07F096", "#F20684", "#F37805", "#130199", "#87023C"];
+		var highlightColors = ["#E64043", "#00B200", "#2251EB", "#F4FB6D", "#FA73F8", "#90F7F9", "#F8D865", "#78F2C3", "#F27EBC", "#F5B06F", "#524995", "#824962"];
        
       	<c:forEach items="${languages}" var="i">
 	   		languages.push("${i}");
@@ -447,27 +447,34 @@
     <!-- Bar Chart - Localización -->
     <script type="text/javascript">
     
+    	var data = [];
+       	var locations = [];
+       	var locationFrecuencies = [];
+       	var labels = [];
+       	
+       	<c:forEach items="${locations}" var="i">
+	   		locations.push("${i}");
+	   		labels.push("Tweets");
+	   	</c:forEach>
+	   	<c:forEach items="${locationFrecuencies}" var="i">
+	   		locationFrecuencies.push("${i}");
+			</c:forEach>
+	
+	   	for(var i = 0; i < locations.length; i++) {
+			data.push({
+		    	province: locations[i],
+		    	value: locationFrecuencies[i]
+		    });
+	    }
+    
 	    Morris.Bar({
 	        element: 'morris-bar-chart',
-	        data: [{
-	            city: 'Madrid',
-	            value: "200"
-	        }, {
-	            city: 'Barcelona',
-	            value: "100"
-	        }, {
-	            city: 'Sevilla',
-	            value: "100"
-	        }, {
-	            city: 'Toledo',
-	            value: "100"
-	        }],
-	        xkey: 'city',
+	        data: data,
+	        xkey: 'province',
 	        ykeys: ['value'],
-	        labels: ['Tweets', 'Tweets', 'Tweets', 'Tweets'],
-	        barColors: ['#f0ad4e', '#d9534f'],
-	        barRatio: 0.4,
-	        xLabelAngle: 35,
+	        labels: labels,
+	        barColors: ['#f0ad4e'],
+	        xLabelAngle: 25,
 	        hideHover: 'auto',
 	        resize: true
 	    });

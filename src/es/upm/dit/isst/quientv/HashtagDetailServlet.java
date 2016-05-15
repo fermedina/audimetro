@@ -71,8 +71,12 @@ public class HashtagDetailServlet extends HttpServlet {
 		
 		// Obtenemos los idiomas de los tweets que contienen el hashtag recibido como parámetro
 		// Obtenemos la cuenta de retweets y favoritos totales
+		// Obtenemos las provincias de los tweets que contienen el hashtag recibido como parámetro
 		ArrayList<String> languages = new ArrayList<String>();
 		ArrayList<Integer> languageFrecuencies = new ArrayList<Integer>();
+		
+		ArrayList<String> locations =  new ArrayList<String>();
+		ArrayList<Integer> locationFrecuencies = new ArrayList<Integer>();
 		
 		int retweetsCount = 0;
 		int favsCount = 0;
@@ -106,6 +110,17 @@ public class HashtagDetailServlet extends HttpServlet {
 				}
 			}
 			
+			// Si locations no contiene la provincia, se añade y se comienza la cuenta de las veces que aparece
+			if(!locations.contains(tweet.getLocalizacion())) {			
+				locations.add(tweet.getLocalizacion());
+				locationFrecuencies.add(1);
+			} else {
+				int index = locations.indexOf(tweet.getLocalizacion());
+				int value = locationFrecuencies.get(index);
+				value++;
+				locationFrecuencies.set(index, value);
+			}
+			
 			// Obtenemos los usuarios, sus links, sus seguidores y sus imágenes de perfil de todos los tweets para después obtener el top 5
 			users.add(tweet.getUsuario());
 			links.add(tweet.getLinkProfile());
@@ -115,6 +130,9 @@ public class HashtagDetailServlet extends HttpServlet {
 		
 		req.setAttribute("languages", languages);
 		req.setAttribute("languageFrecuencies", languageFrecuencies);
+		
+		req.setAttribute("locations", locations);
+		req.setAttribute("locationFrecuencies", locationFrecuencies);
 		
 		req.setAttribute("retweetsCount", retweetsCount);
 		req.setAttribute("favsCount", favsCount);

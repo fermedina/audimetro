@@ -18,7 +18,6 @@ import es.upm.dit.isst.quientv.dao.HashtagDAO;
 import es.upm.dit.isst.quientv.dao.HashtagDAOImpl;
 import es.upm.dit.isst.quientv.dao.TweetDAO;
 import es.upm.dit.isst.quientv.dao.TweetDAOImpl;
-import es.upm.dit.isst.quientv.model.Hashtag;
 import es.upm.dit.isst.quientv.model.Tweet;
 import twitter4j.Query;
 import twitter4j.QueryResult;
@@ -54,6 +53,8 @@ public class SearchServlet extends HttpServlet {
 		for(Tweet tweet: tweetDao.getTweetList()) {
 			tweetDao.deleteTweet(tweet.getId());
 		};
+		
+		String localizacion = "Indeterminada";
 				
 		//TODO Comparar listas
 		for (int i = 0; i < hashtagDao.getHashtagListInSearchPeriod().size(); i++) {
@@ -62,9 +63,12 @@ public class SearchServlet extends HttpServlet {
 
 			try {
 				QueryResult result = twitter.search(query);
-
-				for (Status status : result.getTweets()) {
-					insertedTweets.add(tweetDao.newTweet(hashtagDao.getHashtagList().get(i).getId(), status.getText(), status.getLang(), getProvincia(status.getGeoLocation().getLatitude(), status.getGeoLocation().getLongitude()), status.getUser().getScreenName(), urlTwitter + status.getUser().getScreenName(), status.getUser().getProfileImageURL(), status.getUser().getFollowersCount(), status.getRetweetCount(), status.getFavoriteCount()));
+				
+				for (Status status : result.getTweets()) {					
+					if (status.getGeoLocation() != null) {
+						localizacion = getProvincia(status.getGeoLocation().getLatitude(), status.getGeoLocation().getLongitude());
+					}
+					insertedTweets.add(tweetDao.newTweet(hashtagDao.getHashtagList().get(i).getId(), status.getText(), status.getLang(), localizacion, status.getUser().getScreenName(), urlTwitter + status.getUser().getScreenName(), status.getUser().getProfileImageURL(), status.getUser().getFollowersCount(), status.getRetweetCount(), status.getFavoriteCount()));
 				}
 			} catch (TwitterException e) {
 				// TODO Auto-generated catch block
