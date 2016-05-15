@@ -164,9 +164,12 @@ public class IndexServlet extends HttpServlet {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			
+			RequestDispatcher rd= req.getRequestDispatcher("/search");
+			rd.include(req, resp);
 
-			RequestDispatcher view = req.getRequestDispatcher("/jsp/index.jsp");
-			view.forward(req, resp);
+			/*RequestDispatcher view = req.getRequestDispatcher("/jsp/index.jsp");
+			view.forward(req, resp);*/
 		}
 	}
 }

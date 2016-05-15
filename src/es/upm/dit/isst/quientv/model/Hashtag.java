@@ -22,7 +22,11 @@ public class Hashtag implements Serializable {
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createdat;
+	
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date fechaInicio;
+	
+	@Temporal(TemporalType.TIMESTAMP)
 	private Date fechaFin;
 		
 	public Hashtag(String nombre, Date fechaInicio, Date fechaFin) {

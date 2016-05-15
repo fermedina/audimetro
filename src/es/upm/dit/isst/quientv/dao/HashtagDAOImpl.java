@@ -63,8 +63,15 @@ public class HashtagDAOImpl implements HashtagDAO {
 	public List<Hashtag> getHashtagListInSearchPeriod() {
 		EntityManager em = EMFService.get().createEntityManager();
 		Date now = new Date();
-		Query q = em.createQuery("SELECT h FROM Hashtag WHERE :now BETWEEN fechaInicio AND fechaFin").setParameter("now", now);
+		Query q = null;
+		q = em.createQuery("SELECT h FROM Hashtag h WHERE h.fechaFin >= :now").setParameter("now", now);
+
 		List<Hashtag> res = q.getResultList();
+		for(Hashtag hashtag: res) {
+			if (hashtag.getFechaInicio().after(now)){
+				res.remove(hashtag);
+			}
+		};
 		
 		em.close();
 		return res;
