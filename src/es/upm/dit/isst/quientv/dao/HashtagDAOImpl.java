@@ -1,5 +1,6 @@
 package es.upm.dit.isst.quientv.dao;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -23,10 +24,10 @@ public class HashtagDAOImpl implements HashtagDAO {
 	}
 
 	@Override
-	public Hashtag newHashtag(String nombre) {
+	public Hashtag newHashtag(String nombre, Date fechaInicio, Date fechaFin) {
 		Hashtag hashtag = null;
 		EntityManager em = EMFService.get().createEntityManager();
-		hashtag = new Hashtag(nombre);
+		hashtag = new Hashtag(nombre, fechaInicio, fechaFin);
 		em.persist(hashtag);
 		
 		em.close();
@@ -53,6 +54,24 @@ public class HashtagDAOImpl implements HashtagDAO {
 		EntityManager em = EMFService.get().createEntityManager();
 		Query q = em.createQuery("select h from Hashtag h order by h.createdat asc ");
 		List<Hashtag> res = q.getResultList();
+		
+		em.close();
+		return res;
+	}
+	
+	@Override
+	public List<Hashtag> getHashtagListInSearchPeriod() {
+		EntityManager em = EMFService.get().createEntityManager();
+		Date now = new Date();
+		Query q = null;
+		q = em.createQuery("SELECT h FROM Hashtag h WHERE h.fechaFin >= :now").setParameter("now", now);
+
+		List<Hashtag> res = q.getResultList();
+		for(Hashtag hashtag: res) {
+			if (hashtag.getFechaInicio().after(now)){
+				res.remove(hashtag);
+			}
+		};
 		
 		em.close();
 		return res;

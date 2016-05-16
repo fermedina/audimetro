@@ -6,11 +6,11 @@ import es.upm.dit.isst.quientv.model.Tweet;
 
 public interface TweetDAO {
 	
-	public Tweet newTweet(String hashtagId, String texto, String idioma, String localizacion,
-		String usuario, String linkProfile, String avatar, int seguidoresUsuario,
-		int retweets, int favoritos);
+	public Tweet newTweet(Tweet tweet);
 	
 	public Tweet getTweet(String id);
+	
+	public boolean isStored(Tweet tweet);
 	
 	public List<Tweet> getTweetList();
 	
