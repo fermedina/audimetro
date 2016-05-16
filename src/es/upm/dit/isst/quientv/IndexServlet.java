@@ -53,6 +53,31 @@ public class IndexServlet extends HttpServlet {
 			req.setAttribute("hashtag2", hashtag2);
 			req.setAttribute("hashtag3", hashtag3);
 			req.setAttribute("hashtag4", hashtag4);
+			
+			//Obtenemos los intervalos
+			/*long intervalSize = 6000; //30 minutos en milisegundos
+			long maxTime = 0;
+			long minTime = 0;
+			int intervalQuantities = 0;
+			Date dateInicio = hashtag1.getFechaInicio(); // Momento de inicio de la búsqueda
+			Date dateFin = hashtag1.getFechaFin(); // Momento de fin de la búsqueda
+			
+			maxTime = dateFin.getTime(); //Hora fin en milisegundos
+			minTime = dateInicio.getTime(); //Hora inicio en milisegundos
+			// Calculamos la cantidad de intervalos de 30 minutos entre la fecha de inicio y la de fin
+			intervalQuantities = Math.abs((int)((maxTime - minTime) / intervalSize)); 
+			
+			req.setAttribute("intervalos", intervalQuantities);
+			req.setAttribute("maxTime", maxTime);
+			req.setAttribute("dateFin", dateFin);
+			req.setAttribute("minTime", minTime);
+			req.setAttribute("dateInicio", dateInicio);
+			req.setAttribute("resta", maxTime - minTime);
+			
+			ArrayList<Tweet> tweetsHashtag1 = new ArrayList<Tweet>();
+			ArrayList<Tweet> tweetsHashtag2 = new ArrayList<Tweet>();
+			ArrayList<Tweet> tweetsHashtag3 = new ArrayList<Tweet>();
+			ArrayList<Tweet> tweetsHashtag4 = new ArrayList<Tweet>();*/
 
 			// Si hay tweets insertados en la base de datos: extraigo 8 usuarios y sus tweets para la tabla "Usuarios totales". Esto es para test?
 			if (insertedTweets.size() > 0) {
@@ -63,6 +88,7 @@ public class IndexServlet extends HttpServlet {
 					lastTweets.add(insertedTweets.get(pos));
 				}
 
+				String[] hashtagNames = {"", "", "", ""};
 				int [] tweetsCount = {0, 0, 0, 0};
 				int [] retweetsCount = {0, 0, 0, 0};
 				int [] favCount = {0, 0, 0, 0};
@@ -71,12 +97,14 @@ public class IndexServlet extends HttpServlet {
 					String hashtagId = insertedTweets.get(i).getHashtagId();
 
 					if (hashtagId.equals(hashtags.get(0).getId())) {
+						hashtagNames[0] = hashtags.get(0).getNombre(); 
 						tweetsCount[0]++;
 						retweetsCount[0] += insertedTweets.get(i).getRetweets();
 						favCount[0] += insertedTweets.get(i).getFavoritos();
 					}
 					if (hashtag2 != null) {
 						if (hashtagId.equals(hashtags.get(1).getId())) {
+							hashtagNames[1] = hashtags.get(1).getNombre();
 							tweetsCount[1]++;
 							retweetsCount[1] += insertedTweets.get(i).getRetweets();
 							favCount[1] += insertedTweets.get(i).getFavoritos();
@@ -84,6 +112,7 @@ public class IndexServlet extends HttpServlet {
 					}
 					if (hashtag3 != null) {
 						if (hashtagId.equals(hashtags.get(2).getId())) {
+							hashtagNames[2] = hashtags.get(2).getNombre();
 							tweetsCount[2]++;
 							retweetsCount[2] += insertedTweets.get(i).getRetweets();
 							favCount[2] += insertedTweets.get(i).getFavoritos();
@@ -91,6 +120,7 @@ public class IndexServlet extends HttpServlet {
 					}
 					if (hashtag4 != null) {
 						if (hashtagId.equals(hashtags.get(3).getId())) {
+							hashtagNames[3] = hashtags.get(3).getNombre();
 							tweetsCount[3]++;
 							retweetsCount[3] += insertedTweets.get(i).getRetweets();
 							favCount[3] += insertedTweets.get(i).getFavoritos();
@@ -98,10 +128,11 @@ public class IndexServlet extends HttpServlet {
 					}
 				}
 
+				req.setAttribute("hashtagNames", hashtagNames);
 				req.setAttribute("lastTweets", lastTweets);
 				req.setAttribute("tweetsCount", tweetsCount);
 				req.setAttribute("retweetsCount", retweetsCount);
-				req.setAttribute("favCount", favCount);				
+				req.setAttribute("favCount", favCount);
 			}
 
 			RequestDispatcher view = req.getRequestDispatcher("/jsp/index.jsp");

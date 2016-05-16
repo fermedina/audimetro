@@ -208,7 +208,7 @@
                 <!-- /.List hashtag -->
 
                 <!-- Timeline -->
-                <div class="row">
+                <!--<div class="row">
                     <div class="col-lg-12">
                         <div class="panel panel-blue-black">
                             <div class="panel-heading">
@@ -219,7 +219,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>-->
                 <!-- /.Timeline -->
 
                 <!-- /.row -->
@@ -329,28 +329,36 @@
     
     <!-- Donut Chart -->
     <script type="text/javascript">
+    	var data = [];
+    	var tweetsCount = [];
+    	var hashtagNames = [];
+	    <c:forEach items="${tweetsCount}" var="i">
+	    	tweetsCount.push("${i}");
+		</c:forEach>
+		<c:forEach items="${hashtagNames}" var="i">
+			hashtagNames.push("${i}");
+		</c:forEach>
+		
+		for(var i = 0; i < tweetsCount.length; i++) {
+			if (hashtagNames[i] != "") {
+				data.push({
+			    	value: tweetsCount[i],
+			        label: "#" + hashtagNames[i]
+			    });
+			}	
+        }
+		console.log("nombres", hashtagNames);
+    
 	    Morris.Donut({
 	        element: 'morris-donut-chart',
-	        data: [{
-	            label: "#" + "${hashtag1.nombre}",
-	            value: "${tweetsCount[0]}"
-	        }, {
-	            label: "#" + "${hashtag2.nombre}",
-	            value: "${tweetsCount[1]}"
-	        }, {
-	            label: "#" + "${hashtag3.nombre}",
-	            value: "${tweetsCount[2]}"
-	        }, {
-	            label: "#" + "${hashtag4.nombre}",
-	            value: "${tweetsCount[3]}"
-	        }],
+	        data: data,
 	        resize: true,
 	        colors: ['#337AB7', '#088A08', '#FF8000', '#d9534f']
 	    });
     </script>
     
     <!-- Line Chart -->
-    <script type="text/javascript">
+    <!--<script type="text/javascript">
     	var data = [];
     	var intervalos = "${intervalos}";
     	var maxTime = "${maxTime}";
@@ -358,16 +366,12 @@
     	var minTime = "${minTime}";
     	var dateInicio = "${dateInicio}";
     	var resta = "${resta}";
+    	var tweetsHashtag1 = [];
     	
-    	
-    	console.log("intervalos", intervalos);
-    	console.log("maxTime", maxTime);
-    	console.log("dateFin", dateFin);
-    	console.log("minTime", minTime);
-    	console.log("dateInicio", dateInicio);
-    	console.log("resta", resta);
-    	
-    	
+    	<c:forEach items="${tweetsHashtag1}" var="i">
+    		tweetsHashtag1.push("${i}");
+	   	</c:forEach>
+
     	function js_yyyy_mm_dd_hh_mm (now) {
    		  	year = "" + now.getFullYear();
    		  	month = "" + (now.getMonth() + 1); if (month.length == 1) { month = "0" + month; }
@@ -377,20 +381,21 @@
    		  	return year + "-" + month + "-" + day + " " + hour + ":" + minute;
    		}
     	    	
-    	for(var i = 0; i <= intervalos; i++) {
+    	for(var i = 0; i < tweetsHashtag1.length; i++) {
     		var fechas = [];
     		var tweetsH1 = [];
     		var tweetsH2 = [];
     		var tweetsH3 = [];
     		var tweetsH4 = [];
-    		<c:forEach items="${datosH1}" var="dato">
-    			var a = "${dato.intervalo}";
+    		<c:forEach items="${tweetsHashtag1}" var="tweet">
+    			var a = "${tweet.createdAt}";
     			var b = a.split("CEST");
-    			var d = new Date(b[0]);
+    			//var d = new Date(b[0]+" "+b[1]);
+    			var d = new Date(a);
 				fechas.push(d);
-    			tweetsH1.push("${dato.tweets}");
+    			tweetsH1.push(100);
 			</c:forEach>
-			<c:forEach items="${datosH2}" var="dato">
+			/*<c:forEach items="${datosH2}" var="dato">
 				tweetsH2.push("${dato.tweets}");
 			</c:forEach>
 			<c:forEach items="${datosH3}" var="dato">
@@ -398,14 +403,11 @@
 			</c:forEach>
 			<c:forEach items="${datosH4}" var="dato">
 				tweetsH4.push("${dato.tweets}");
-			</c:forEach>
+			</c:forEach>*/
     		var format = js_yyyy_mm_dd_hh_mm(fechas[i]);
     		data.push({
     			period: format,
-	            hashtag1: tweetsH1[i],
-	            hashtag2: tweetsH2[i],
-	            hashtag3: tweetsH3[i],
-	            hashtag4: tweetsH4[i]
+	            hashtag1: tweetsH1[i]
     		});
     	}
     
@@ -418,17 +420,17 @@
 	        // The name of the data record attribute that contains x-visitss.
 	        xkey: 'period',
 	        // A list of names of data record attributes that contain y-visitss.
-	        ykeys: ['hashtag1', 'hashtag2', 'hashtag3', 'hashtag4'], // Valores eje y
+	        ykeys: ['hashtag1'], // Valores eje y
 	        // Labels for the ykeys -- will be displayed when you hover over the
 	        // chart.
-	        labels: ["${hashtag1.nombre}", "${hashtag2.nombre}", "${hashtag3.nombre}", "${hashtag4.nombre}"],
+	        labels: ["${hashtag1.nombre}"],
 	        hideHover: 'auto',
 	        lineColors: ['#337AB7', '#088A08', '#FF8000', '#d9534f'],
 	        // Disables line smoothing
 	        smooth: false,
 	        resize: true
 	    });
-    </script>
+    </script>-->
 
 </body>
 
