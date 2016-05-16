@@ -23,14 +23,8 @@ public class TweetDAOImpl implements TweetDAO {
 	}
 
 	@Override
-	public Tweet newTweet(String hashtagId, String texto, String idioma, String localizacion,
-			String usuario, String linkProfile, String avatar, int seguidoresUsuario,
-			int retweets, int favoritos) {
+	public Tweet newTweet(Tweet tweet) {
 		EntityManager em = EMFService.get().createEntityManager();
-		
-		Tweet tweet = null;
-		tweet = new Tweet(hashtagId, texto, idioma, localizacion, usuario, linkProfile,
-				avatar, seguidoresUsuario, retweets, favoritos);
 		
 		em.persist(tweet);
 		
@@ -46,6 +40,16 @@ public class TweetDAOImpl implements TweetDAO {
 		
 		em.close();
 		return res;
+	}
+	
+	@Override
+	public boolean isStored(Tweet tweet) {
+		EntityManager em = EMFService.get().createEntityManager();
+		
+		boolean isStored = em.contains(tweet);
+		
+		em.close();
+		return isStored;
 	}
 
 	@Override

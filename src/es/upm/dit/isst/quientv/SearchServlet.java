@@ -61,12 +61,20 @@ public class SearchServlet extends HttpServlet {
 
 			try {
 				QueryResult result = twitter.search(query);
-				
-				for (Status status : result.getTweets()) {					
-					if (status.getGeoLocation() != null) {
-						localizacion = getProvincia(status.getGeoLocation().getLatitude(), status.getGeoLocation().getLongitude());
+
+				for (Status status : result.getTweets()) {
+					Tweet tweet = new Tweet (hashtagDao.getHashtagList().get(i).getId(), 
+												status.getText(), status.getLang(), 
+												status.getUser().getLocation(), 
+												status.getUser().getScreenName(), 
+												urlTwitter + status.getUser().getScreenName(), 
+												status.getUser().getProfileImageURL(), 
+												status.getUser().getFollowersCount(), 
+												status.getRetweetCount(), 
+												status.getFavoriteCount());
+					if (!tweetDao.isStored(tweet)){
+						insertedTweets.add(tweetDao.newTweet(tweet));
 					}
-					insertedTweets.add(tweetDao.newTweet(hashtagDao.getHashtagListInSearchPeriod().get(i).getId(), status.getText(), status.getLang(), localizacion, status.getUser().getScreenName(), urlTwitter + status.getUser().getScreenName(), status.getUser().getProfileImageURL(), status.getUser().getFollowersCount(), status.getRetweetCount(), status.getFavoriteCount()));
 				}
 			} catch (TwitterException e) {
 				// TODO Auto-generated catch block
