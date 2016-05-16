@@ -6,7 +6,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.TimeZone;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
 
@@ -30,7 +29,7 @@ import twitter4j.conf.ConfigurationBuilder;
 @SuppressWarnings("serial")
 public class SearchServlet extends HttpServlet {
 
-	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
 		HashtagDAO hashtagDao = HashtagDAOImpl.getInstance();
 		TweetDAO tweetDao = TweetDAOImpl.getInstance();
 
@@ -50,13 +49,12 @@ public class SearchServlet extends HttpServlet {
 		String urlTwitter = "https://twitter.com/";
 		
 		// Obtenemos los tweets almacenados y los borramos antes de guardar los nuevos
-		for(Tweet tweet: tweetDao.getTweetList()) {
+		/*for(Tweet tweet: tweetDao.getTweetList()) {
 			tweetDao.deleteTweet(tweet.getId());
-		};
+		};*/
 		
 		String localizacion = "Indeterminada";
-				
-		//TODO Comparar listas
+						
 		for (int i = 0; i < hashtagDao.getHashtagListInSearchPeriod().size(); i++) {
 			Query query = new Query("#" + hashtagDao.getHashtagListInSearchPeriod().get(i).getNombre());
 			query.setCount(100);
@@ -68,7 +66,7 @@ public class SearchServlet extends HttpServlet {
 					if (status.getGeoLocation() != null) {
 						localizacion = getProvincia(status.getGeoLocation().getLatitude(), status.getGeoLocation().getLongitude());
 					}
-					insertedTweets.add(tweetDao.newTweet(hashtagDao.getHashtagList().get(i).getId(), status.getText(), status.getLang(), localizacion, status.getUser().getScreenName(), urlTwitter + status.getUser().getScreenName(), status.getUser().getProfileImageURL(), status.getUser().getFollowersCount(), status.getRetweetCount(), status.getFavoriteCount()));
+					insertedTweets.add(tweetDao.newTweet(hashtagDao.getHashtagListInSearchPeriod().get(i).getId(), status.getText(), status.getLang(), localizacion, status.getUser().getScreenName(), urlTwitter + status.getUser().getScreenName(), status.getUser().getProfileImageURL(), status.getUser().getFollowersCount(), status.getRetweetCount(), status.getFavoriteCount()));
 				}
 			} catch (TwitterException e) {
 				// TODO Auto-generated catch block
@@ -76,8 +74,8 @@ public class SearchServlet extends HttpServlet {
 			}
 		}
 		
-		RequestDispatcher view = req.getRequestDispatcher("/jsp/add.jsp");
-		view.forward(req, resp);
+		/*RequestDispatcher view = req.getRequestDispatcher("/jsp/add.jsp");
+		view.forward(req, resp);*/
 	}
 	
 	public static String getProvincia(double lat, double lon) throws MalformedURLException, IOException{

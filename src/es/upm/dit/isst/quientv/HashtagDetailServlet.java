@@ -14,10 +14,13 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import es.upm.dit.isst.quientv.dao.BusquedaDAO;
+import es.upm.dit.isst.quientv.dao.BusquedaDAOImpl;
 import es.upm.dit.isst.quientv.dao.HashtagDAO;
 import es.upm.dit.isst.quientv.dao.HashtagDAOImpl;
 import es.upm.dit.isst.quientv.dao.TweetDAO;
 import es.upm.dit.isst.quientv.dao.TweetDAOImpl;
+import es.upm.dit.isst.quientv.model.Busqueda;
 import es.upm.dit.isst.quientv.model.Hashtag;
 import es.upm.dit.isst.quientv.model.Tweet;
 
@@ -30,15 +33,20 @@ public class HashtagDetailServlet extends HttpServlet {
 		String hashtagId = req.getParameter("id");
 		
 		// Instancias de los DAOs
+		BusquedaDAO busquedaDao = BusquedaDAOImpl.getInstance();
 		HashtagDAO hashtagDao = HashtagDAOImpl.getInstance();
 		TweetDAO tweetDao = TweetDAOImpl.getInstance();
+		
+		// Obtenemos la lista de Búsquedas realizadas para pintarlas en el menú lateral
+		List<Busqueda> searchList = busquedaDao.getBusquedaList();
+		req.setAttribute("searchList", searchList);
 		
 		// Obtenemos el objeto Hashtag con el Id del hashtag recibido como parámetro
 		Hashtag hashtagSelected = hashtagDao.getHashtag(hashtagId);
 		req.setAttribute("hashtag", hashtagSelected);
 		
 		// Obtenemos la lista de los hashtags guardados
-		List<Hashtag> hashtags = hashtagDao.getHashtagList();
+		List<Hashtag> hashtags = hashtagDao.getHashtagListByBusquedaId(hashtagSelected.getBusquedaId());
 		
 		if (hashtags.size() > 0) {
 			Hashtag hashtag1 = hashtags.get(0);

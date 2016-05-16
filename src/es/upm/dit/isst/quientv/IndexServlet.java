@@ -12,10 +12,13 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
 
+import es.upm.dit.isst.quientv.dao.BusquedaDAO;
+import es.upm.dit.isst.quientv.dao.BusquedaDAOImpl;
 import es.upm.dit.isst.quientv.dao.HashtagDAO;
 import es.upm.dit.isst.quientv.dao.HashtagDAOImpl;
 import es.upm.dit.isst.quientv.dao.TweetDAO;
 import es.upm.dit.isst.quientv.dao.TweetDAOImpl;
+import es.upm.dit.isst.quientv.model.Busqueda;
 import es.upm.dit.isst.quientv.model.Hashtag;
 import es.upm.dit.isst.quientv.model.Tweet;
 
@@ -24,12 +27,41 @@ public class IndexServlet extends HttpServlet {
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
 		resp.setContentType("text/plain");
 
+		BusquedaDAO busquedaDao = BusquedaDAOImpl.getInstance();
 		HashtagDAO hashtagDao = HashtagDAOImpl.getInstance();
 		TweetDAO tweetDao = TweetDAOImpl.getInstance();
 
-		List<Hashtag> hashtags = hashtagDao.getHashtagList();
-		List<Tweet> insertedTweets = tweetDao.getTweetList();
-
+		List<Busqueda> searchList = busquedaDao.getBusquedaList();
+		req.setAttribute("searchList", searchList);
+		
+		// Id de la búsqueda que queremos ver
+		String inputBusquedaId = req.getParameter("searchId");
+		
+		String busquedaId;
+		
+		//Si entramos en la vista Index sin id de búsqueda, visualizamos datos de la última búsqueda
+		if (inputBusquedaId == null) {
+			if (searchList.size() > 0) {
+				busquedaId = searchList.get(searchList.size() - 1).getId();
+			} else {
+				busquedaId = "vacio";
+			}			
+		} else {
+			busquedaId = inputBusquedaId;
+		}
+		
+		List<Hashtag> hashtags = hashtagDao.getHashtagListByBusquedaId(busquedaId);
+		List<Tweet> allTweets = tweetDao.getTweetList();
+		ArrayList<Tweet> insertedTweets = new ArrayList<Tweet>();
+		
+		for(Hashtag hashtag : hashtags) {
+			for(Tweet tweet : allTweets) {
+				if (tweet.getHashtagId().equals(hashtag.getId())) {
+					insertedTweets.add(tweet);
+				}
+			}
+		}
+				
 		if (hashtags.size() > 0) {
 			Hashtag hashtag1 = hashtags.get(0);
 			Hashtag hashtag2 = null;
@@ -53,31 +85,6 @@ public class IndexServlet extends HttpServlet {
 			req.setAttribute("hashtag2", hashtag2);
 			req.setAttribute("hashtag3", hashtag3);
 			req.setAttribute("hashtag4", hashtag4);
-			
-			//Obtenemos los intervalos
-			/*long intervalSize = 6000; //30 minutos en milisegundos
-			long maxTime = 0;
-			long minTime = 0;
-			int intervalQuantities = 0;
-			Date dateInicio = hashtag1.getFechaInicio(); // Momento de inicio de la búsqueda
-			Date dateFin = hashtag1.getFechaFin(); // Momento de fin de la búsqueda
-			
-			maxTime = dateFin.getTime(); //Hora fin en milisegundos
-			minTime = dateInicio.getTime(); //Hora inicio en milisegundos
-			// Calculamos la cantidad de intervalos de 30 minutos entre la fecha de inicio y la de fin
-			intervalQuantities = Math.abs((int)((maxTime - minTime) / intervalSize)); 
-			
-			req.setAttribute("intervalos", intervalQuantities);
-			req.setAttribute("maxTime", maxTime);
-			req.setAttribute("dateFin", dateFin);
-			req.setAttribute("minTime", minTime);
-			req.setAttribute("dateInicio", dateInicio);
-			req.setAttribute("resta", maxTime - minTime);
-			
-			ArrayList<Tweet> tweetsHashtag1 = new ArrayList<Tweet>();
-			ArrayList<Tweet> tweetsHashtag2 = new ArrayList<Tweet>();
-			ArrayList<Tweet> tweetsHashtag3 = new ArrayList<Tweet>();
-			ArrayList<Tweet> tweetsHashtag4 = new ArrayList<Tweet>();*/
 
 			// Si hay tweets insertados en la base de datos: extraigo 8 usuarios y sus tweets para la tabla "Usuarios totales". Esto es para test?
 			if (insertedTweets.size() > 0) {
@@ -95,7 +102,7 @@ public class IndexServlet extends HttpServlet {
 
 				for(int i = 0; i < insertedTweets.size(); i++) {
 					String hashtagId = insertedTweets.get(i).getHashtagId();
-
+					
 					if (hashtagId.equals(hashtags.get(0).getId())) {
 						hashtagNames[0] = hashtags.get(0).getNombre(); 
 						tweetsCount[0]++;
@@ -160,14 +167,15 @@ public class IndexServlet extends HttpServlet {
 		TimeZone.setDefault(TimeZone.getTimeZone("GMT+2:00"));
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");		
 
+		BusquedaDAO busquedaDao = BusquedaDAOImpl.getInstance();
 		HashtagDAO hashtagDao = HashtagDAOImpl.getInstance();
 
 		if (hashtag1 != null) {
 
 			// Obtenemos los hashtags almacenados y los borramos antes de guardar los nuevos
-			for(Hashtag hashtag: hashtagDao.getHashtagList()) {
+			/*for(Hashtag hashtag: hashtagDao.getHashtagList()) {
 				hashtagDao.deleteHashtag(hashtag.getId());
-			};
+			};*/
 
 			try {			
 				if (!franjaHorariaInicio.isEmpty() && !franjaHorariaFin.isEmpty()) {
@@ -177,26 +185,31 @@ public class IndexServlet extends HttpServlet {
 					dateInicio = new Date();
 					dateFin = df.parse(horaFinInput);
 				}
+				
+				Busqueda busqueda = busquedaDao.newBusqueda(req.getParameter("busqueda"), req.getParameter("name"), req.getParameter("cif"));
 								
 				// Guardamos los nuevos hashtags
-				hashtagDao.newHashtag(hashtag1, dateInicio, dateFin);
+				hashtagDao.newHashtag(hashtag1, dateInicio, dateFin, busqueda.getId(), req.getParameter("program1"));
 
-				if (!hashtag2.isEmpty()) { hashtagDao.newHashtag(hashtag2, dateInicio, dateFin); }
-				if (!hashtag3.isEmpty()) { hashtagDao.newHashtag(hashtag3, dateInicio, dateFin); }
-				if (!hashtag4.isEmpty()) { hashtagDao.newHashtag(hashtag4, dateInicio, dateFin); }
+				if (!hashtag2.isEmpty()) { hashtagDao.newHashtag(hashtag2, dateInicio, dateFin, busqueda.getId(), req.getParameter("program2")); }
+				if (!hashtag3.isEmpty()) { hashtagDao.newHashtag(hashtag3, dateInicio, dateFin, busqueda.getId(), req.getParameter("program3")); }
+				if (!hashtag4.isEmpty()) { hashtagDao.newHashtag(hashtag4, dateInicio, dateFin, busqueda.getId(), req.getParameter("program4")); }
 
 			} catch (ParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
-			if (!horaFinInput.isEmpty()) {
+			RequestDispatcher view = req.getRequestDispatcher("/jsp/index.jsp");
+			view.forward(req, resp);
+			
+			/*if (!horaFinInput.isEmpty()) {
 				RequestDispatcher rd= req.getRequestDispatcher("/search");
 				rd.include(req, resp);
 			} else {
 				RequestDispatcher view = req.getRequestDispatcher("/jsp/add.jsp");
 				view.forward(req, resp);
-			}		
+			}*/		
 		}
 	}
 }
