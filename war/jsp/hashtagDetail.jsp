@@ -86,7 +86,18 @@
                         </ul>
                     </li>
                     <li>
-                        <a href="add"><i class="fa fa-fw fa-edit"></i> Añadir Hashtags</a>
+                        <a href="javascript:;" data-toggle="collapse" data-target="#demo2"><i class="fa fa-fw fa-list-ol"></i> Búsquedas anteriores <i class="fa fa-fw fa-caret-down"></i></a>
+                        <ul id="demo2" class="collapse">
+                        
+                        	<c:forEach items="${searchList}" var="search">
+                        		<li>
+	                                <a href="index?searchId=${search.id}"><i class="fa fa-search"></i> <c:out value="${search.nombre}" /></a>
+	                            </li>
+                        	</c:forEach>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="add"><i class="fa fa-fw fa-edit"></i> Configuración de búsqueda</a>
                     </li>
                 </ul>
             </div>

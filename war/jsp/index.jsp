@@ -83,7 +83,18 @@
                         </ul>
                     </li>
                     <li>
-                        <a href="add"><i class="fa fa-fw fa-edit"></i> Añadir Hashtags</a>
+                        <a href="javascript:;" data-toggle="collapse" data-target="#demo2"><i class="fa fa-fw fa-list-ol"></i> Búsquedas anteriores <i class="fa fa-fw fa-caret-down"></i></a>
+                        <ul id="demo2" class="collapse">
+                        
+                        	<c:forEach items="${searchList}" var="search">
+                        		<li>
+	                                <a href="index?searchId=${search.id}"><i class="fa fa-search"></i> <c:out value="${search.nombre}" /></a>
+	                            </li>
+                        	</c:forEach>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="add"><i class="fa fa-fw fa-edit"></i> Configuración de búsqueda</a>
                     </li>
                 </ul>
             </div>
@@ -205,25 +216,6 @@
 	                    </div>
 	            	</c:if>
                 </div>
-                <!-- /.List hashtag -->
-
-                <!-- Timeline -->
-                <!--<div class="row">
-                    <div class="col-lg-12">
-                        <div class="panel panel-blue-black">
-                            <div class="panel-heading">
-                                <h3 class="panel-title"><i class="fa fa-bar-chart-o"></i> Timeline</h3>
-                            </div>
-                            <div class="panel-body">
-                                <div id="morris-line-chart"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>-->
-                <!-- /.Timeline -->
-
-                <!-- /.row -->
-
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="panel panel-yellow">
@@ -347,7 +339,6 @@
 			    });
 			}	
         }
-		console.log("nombres", hashtagNames);
     
 	    Morris.Donut({
 	        element: 'morris-donut-chart',
@@ -356,82 +347,5 @@
 	        colors: ['#337AB7', '#088A08', '#FF8000', '#d9534f']
 	    });
     </script>
-    
-    <!-- Line Chart -->
-    <!--<script type="text/javascript">
-    	var data = [];
-    	var intervalos = "${intervalos}";
-    	var maxTime = "${maxTime}";
-    	var dateFin = "${dateFin}";
-    	var minTime = "${minTime}";
-    	var dateInicio = "${dateInicio}";
-    	var resta = "${resta}";
-    	var tweetsHashtag1 = [];
-    	
-    	<c:forEach items="${tweetsHashtag1}" var="i">
-    		tweetsHashtag1.push("${i}");
-	   	</c:forEach>
-
-    	function js_yyyy_mm_dd_hh_mm (now) {
-   		  	year = "" + now.getFullYear();
-   		  	month = "" + (now.getMonth() + 1); if (month.length == 1) { month = "0" + month; }
-   		  	day = "" + now.getDate(); if (day.length == 1) { day = "0" + day; }
-   		  	hour = "" + now.getHours(); if (hour.length == 1) { hour = "0" + hour; }
-   		  	minute = "" + now.getMinutes(); if (minute.length == 1) { minute = "0" + minute; }
-   		  	return year + "-" + month + "-" + day + " " + hour + ":" + minute;
-   		}
-    	    	
-    	for(var i = 0; i < tweetsHashtag1.length; i++) {
-    		var fechas = [];
-    		var tweetsH1 = [];
-    		var tweetsH2 = [];
-    		var tweetsH3 = [];
-    		var tweetsH4 = [];
-    		<c:forEach items="${tweetsHashtag1}" var="tweet">
-    			var a = "${tweet.createdAt}";
-    			var b = a.split("CEST");
-    			//var d = new Date(b[0]+" "+b[1]);
-    			var d = new Date(a);
-				fechas.push(d);
-    			tweetsH1.push(100);
-			</c:forEach>
-			/*<c:forEach items="${datosH2}" var="dato">
-				tweetsH2.push("${dato.tweets}");
-			</c:forEach>
-			<c:forEach items="${datosH3}" var="dato">
-				tweetsH3.push("${dato.tweets}");
-			</c:forEach>
-			<c:forEach items="${datosH4}" var="dato">
-				tweetsH4.push("${dato.tweets}");
-			</c:forEach>*/
-    		var format = js_yyyy_mm_dd_hh_mm(fechas[i]);
-    		data.push({
-    			period: format,
-	            hashtag1: tweetsH1[i]
-    		});
-    	}
-    
-	    Morris.Line({
-	        // ID of the element in which to draw the chart.
-	        element: 'morris-line-chart',
-	        // Chart data records -- each entry in this array corresponds to a point on
-	        // the chart.
-	        data: data,
-	        // The name of the data record attribute that contains x-visitss.
-	        xkey: 'period',
-	        // A list of names of data record attributes that contain y-visitss.
-	        ykeys: ['hashtag1'], // Valores eje y
-	        // Labels for the ykeys -- will be displayed when you hover over the
-	        // chart.
-	        labels: ["${hashtag1.nombre}"],
-	        hideHover: 'auto',
-	        lineColors: ['#337AB7', '#088A08', '#FF8000', '#d9534f'],
-	        // Disables line smoothing
-	        smooth: false,
-	        resize: true
-	    });
-    </script>-->
-
 </body>
-
 </html>
