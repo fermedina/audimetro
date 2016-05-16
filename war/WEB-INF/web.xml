@@ -21,44 +21,20 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
 		<url-pattern>/add</url-pattern>
 	</servlet-mapping>
 	<servlet>
+		<servlet-name>HashtagDetail</servlet-name>
+		<servlet-class>es.upm.dit.isst.quientv.HashtagDetailServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>HashtagDetail</servlet-name>
+		<url-pattern>/hashtagDetail</url-pattern>
+	</servlet-mapping>
+	<servlet>
 		<servlet-name>Search</servlet-name>
 		<servlet-class>es.upm.dit.isst.quientv.SearchServlet</servlet-class>
 	</servlet>
 	<servlet-mapping>
 		<servlet-name>Search</servlet-name>
 		<url-pattern>/search</url-pattern>
-	</servlet-mapping>
-	<servlet>
-		<servlet-name>Hashtag1</servlet-name>
-		<servlet-class>es.upm.dit.isst.quientv.Hashtag1Servlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>Hashtag1</servlet-name>
-		<url-pattern>/hashtag1</url-pattern>
-	</servlet-mapping>
-	<servlet>
-		<servlet-name>Hashtag2</servlet-name>
-		<servlet-class>es.upm.dit.isst.quientv.Hashtag2Servlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>Hashtag2</servlet-name>
-		<url-pattern>/hashtag2</url-pattern>
-	</servlet-mapping>
-	<servlet>
-		<servlet-name>Hashtag3</servlet-name>
-		<servlet-class>es.upm.dit.isst.quientv.Hashtag3Servlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>Hashtag3</servlet-name>
-		<url-pattern>/hashtag3</url-pattern>
-	</servlet-mapping>
-	<servlet>
-		<servlet-name>Hashtag4</servlet-name>
-		<servlet-class>es.upm.dit.isst.quientv.Hashtag4Servlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>Hashtag4</servlet-name>
-		<url-pattern>/hashtag4</url-pattern>
 	</servlet-mapping>
 	<welcome-file-list>
 		<welcome-file>index</welcome-file>

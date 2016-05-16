@@ -1,18 +1,22 @@
 package es.upm.dit.isst.quientv;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.TimeZone;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.*;
+
+import org.apache.commons.io.IOUtils;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import es.upm.dit.isst.quientv.dao.HashtagDAO;
 import es.upm.dit.isst.quientv.dao.HashtagDAOImpl;
 import es.upm.dit.isst.quientv.dao.TweetDAO;
 import es.upm.dit.isst.quientv.dao.TweetDAOImpl;
-import es.upm.dit.isst.quientv.model.Hashtag;
 import es.upm.dit.isst.quientv.model.Tweet;
 import twitter4j.Query;
 import twitter4j.QueryResult;
@@ -25,7 +29,7 @@ import twitter4j.conf.ConfigurationBuilder;
 @SuppressWarnings("serial")
 public class SearchServlet extends HttpServlet {
 
-	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
+	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
 		HashtagDAO hashtagDao = HashtagDAOImpl.getInstance();
 		TweetDAO tweetDao = TweetDAOImpl.getInstance();
 
@@ -45,11 +49,12 @@ public class SearchServlet extends HttpServlet {
 		String urlTwitter = "https://twitter.com/";
 		
 		// Obtenemos los tweets almacenados y los borramos antes de guardar los nuevos
-		for(Tweet tweet: tweetDao.getTweetList()) {
+		/*for(Tweet tweet: tweetDao.getTweetList()) {
 			tweetDao.deleteTweet(tweet.getId());
-		};
-				
-		//TODO Comparar listas
+		};*/
+		
+		String localizacion = "Indeterminada";
+						
 		for (int i = 0; i < hashtagDao.getHashtagListInSearchPeriod().size(); i++) {
 			Query query = new Query("#" + hashtagDao.getHashtagListInSearchPeriod().get(i).getNombre());
 			query.setCount(100);
@@ -77,8 +82,43 @@ public class SearchServlet extends HttpServlet {
 			}
 		}
 		
-		RequestDispatcher view = req.getRequestDispatcher("/jsp/add.jsp");
-		view.forward(req, resp);
+		/*RequestDispatcher view = req.getRequestDispatcher("/jsp/add.jsp");
+		view.forward(req, resp);*/
+	}
+	
+	public static String getProvincia(double lat, double lon) throws MalformedURLException, IOException{
+		String key = "AIzaSyB0tRpeEfOEvt7X5i8TKKXOWzGqLsQh9_E";
+		String urlString = "https://maps.googleapis.com/maps/api/geocode/json";
+		urlString += "?latlng=" + lat + "," + lon;
+		urlString += "&key=" + key;
+		
+		String placeJson = IOUtils.toString(new URL(urlString), "UTF-8");
+		JSONObject json = new JSONObject(placeJson);
+		
+		//Si no se obtienen resultados
+		if(!json.get("status").equals("OK")){
+			return "Indifinida";
+		}
+		
+		//Obtiene el elemento results
+		JSONArray results = (JSONArray) json.get("results");
+		
+		//Obtiene el primer elemento de results
+		JSONObject resultsObj = (JSONObject)results.getJSONObject(0);
+		
+		//Obtiene los valores de address_components
+		JSONArray address_components = (JSONArray)resultsObj.getJSONArray("address_components");
+		
+		//Recorre address_components para buscar el valor deseado para la provincia
+		for(int i = 0; i < address_components.length(); i++){		
+			JSONObject addressObj = (JSONObject)address_components.getJSONObject(i);
+			JSONArray array = (JSONArray) addressObj.get("types");
+			
+			if (array.get(0).equals("administrative_area_level_2")){
+				return addressObj.get("long_name").toString();
+			}
+		}
+		return "Indefinida";
 	}
 }
 

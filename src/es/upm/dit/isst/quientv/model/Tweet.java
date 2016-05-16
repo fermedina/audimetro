@@ -193,7 +193,7 @@ public class Tweet implements Serializable {
 	/**
 	 * @return the createdAt
 	 */
-	public int getCreatedAt() {
-		return favoritos;
+	public Date getCreatedAt() {
+		return createdAt;
 	}
 }

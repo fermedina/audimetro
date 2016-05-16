@@ -18,7 +18,7 @@ public class Hashtag implements Serializable {
 	
 	@Id @GeneratedValue(strategy = GenerationType.IDENTITY) String id;
 	
-	private String nombre;
+	private String nombre, busquedaId, programa;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createdat;
@@ -29,12 +29,14 @@ public class Hashtag implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date fechaFin;
 		
-	public Hashtag(String nombre, Date fechaInicio, Date fechaFin) {
+	public Hashtag(String nombre, Date fechaInicio, Date fechaFin, String busquedaId, String programa) {
 		this.id = UUID.randomUUID().toString();
 		this.nombre = nombre;
 		this.createdat = new Date();
 		this.fechaInicio = fechaInicio;
 		this.fechaFin = fechaFin;
+		this.busquedaId = busquedaId;
+		this.programa = programa;
 	}
 	
 	public String getId() {
@@ -63,5 +65,33 @@ public class Hashtag implements Serializable {
 
 	public void setCreatedAt(Date createdat) {
 		this.createdat = createdat;
+	}
+
+	/**
+	 * @return the busquedaId
+	 */
+	public String getBusquedaId() {
+		return busquedaId;
+	}
+
+	/**
+	 * @param busquedaId the busquedaId to set
+	 */
+	public void setBusquedaId(String busquedaId) {
+		this.busquedaId = busquedaId;
+	}
+
+	/**
+	 * @return the programa
+	 */
+	public String getPrograma() {
+		return programa;
+	}
+
+	/**
+	 * @param programa the programa to set
+	 */
+	public void setPrograma(String programa) {
+		this.programa = programa;
 	}
 }

@@ -57,26 +57,45 @@
                         <a href="index"><i class="fa fa-home"></i> Inicio</a>
                     </li>
                     <c:if test="${not empty hashtags}">
-						<li>
+                    	<li>
 	                        <a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="fa fa-fw fa-list"></i> Hashtags <i class="fa fa-fw fa-caret-down"></i></a>
 	                        <ul id="demo" class="collapse">
 	                            <li>
-	                                <a href="hashtag1"><i class="fa fa-hashtag"></i> Hashtag1</a>
+	                                <a href="hashtagDetail?id=${hashtag1.id}"><i class="fa fa-hashtag"></i> <c:out value="${hashtag1.nombre}" /></a>
 	                            </li>
-	                            <li>
-	                                <a href="hashtag2"><i class="fa fa-hashtag"></i> Hashtag2</a>
-	                            </li>
-	                            <li>
-	                                <a href="hashtag3"><i class="fa fa-hashtag"></i> Hashtag3</a>
-	                            </li>
-	                            <li>
-	                                <a href="hashtag4"><i class="fa fa-hashtag"></i> Hashtag4</a>
-	                            </li>
+	                            <c:if test="${not empty hashtag2}">                                          
+		                            <li>
+		                                <a href="hashtagDetail?id=${hashtag2.id}"><i class="fa fa-hashtag"></i> <c:out value="${hashtag2.nombre}" /></a>
+		                            </li>
+	                            </c:if>
+	                            <c:if test="${not empty hashtag3}">
+		                            <li>
+		                                <a href="hashtagDetail?id=${hashtag3.id}"><i class="fa fa-hashtag"></i> <c:out value="${hashtag3.nombre}" /></a>
+		                            </li>
+	                            </c:if>
+	                            <c:if test="${not empty hashtag4}">
+		                            <li>
+		                                <a href="hashtagDetail?id=${hashtag4.id}"><i class="fa fa-hashtag"></i> <c:out value="${hashtag4.nombre}" /></a>
+		                            </li>
+	                            </c:if>
 	                        </ul>
 	                    </li>
 					</c:if>
+					<c:if test="${not empty searchList}">
+						<li>
+	                        <a href="javascript:;" data-toggle="collapse" data-target="#demo2"><i class="fa fa-fw fa-list-ol"></i> Búsquedas anteriores <i class="fa fa-fw fa-caret-down"></i></a>
+	                        <ul id="demo2" class="collapse">
+	                        
+	                        	<c:forEach items="${searchList}" var="search">
+	                        		<li>
+		                                <a href="index?searchId=${search.id}"><i class="fa fa-search"></i> <c:out value="${search.nombre}" /></a>
+		                            </li>
+	                        	</c:forEach>
+	                        </ul>
+	                    </li>
+                    </c:if>
                     <li class="active">
-                        <a href="add"><i class="fa fa-fw fa-edit"></i> Añadir Hashtags</a>
+                        <a href="add"><i class="fa fa-fw fa-edit"></i> Configuración de búsqueda</a>
                     </li>
                 </ul>
             </div>
@@ -91,14 +110,14 @@
                 <div class="row">
                     <div class="col-lg-12">
                         <h1 class="page-header">
-                            Añadir Hashtags
+                            Configuración de búsqueda
                         </h1>
                         <ol class="breadcrumb">
                             <li>
                                 <i class="fa fa-list-ol"></i>  <a href="index">Hashtags</a>
                             </li>
                             <li class="active">
-                                <i class="fa fa-edit"></i> Añadir Hashtags
+                                <i class="fa fa-edit"></i> Configuración de búsqueda
                             </li>
                         </ol>
                     </div>
@@ -107,36 +126,87 @@
 
                 <div class="row add-hashtag">
                     <form id="target" action="/index" method="post" acceptcharset="utf-8">
-                        <div class="col-lg-12">
-                            <label>Seleccione cuatro Hashtag a monitorizar</label>
+                    	<div class="col-lg-12">
+                            <label>Introduzca un identificador de búsqueda</label>
                         </div>
                         
                         <div class="col-lg-6">
                             <div class="form-group input-group">
-                                <span class="input-group-addon"><i class="fa fa-hashtag"></i></span>
-                                <input type="text" name="hashtag1" class="form-control" required placeholder="Hashtag">
+                                <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                                <input type="text" name="busqueda" class="form-control" required placeholder="Identificador de búsqueda">
                             </div>
                         </div>
-
-                        <div class="col-lg-6">
+                        
+                        <div class="col-lg-12">
+                            <label>Información del cliente</label>
+                        </div>
+                        
+                        <div class="col-lg-4">
                             <div class="form-group input-group">
-                                <span class="input-group-addon"><i class="fa fa-hashtag"></i></span>
-                                <input type="text" name="hashtag2" class="form-control" placeholder="Hashtag">
+                                <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                <input type="text" name="name" class="form-control" placeholder="Nombre">
                             </div>
                         </div>
-
-                        <div class="col-lg-6">
+                        
+                        <div class="col-lg-4">
                             <div class="form-group input-group">
-                                <span class="input-group-addon"><i class="fa fa-hashtag"></i></span>
-                                <input type="text" name="hashtag3" class="form-control" placeholder="Hashtag">
+                                <span class="input-group-addon"><i class="fa fa-briefcase"></i></span>
+                                <input type="text" name="cif" class="form-control" placeholder="CIF">
                             </div>
                         </div>
-
-                        <div class="col-lg-6">
-                            <div class="form-group input-group">
-                                <span class="input-group-addon"><i class="fa fa-hashtag"></i></span>
-                                <input type="text" name="hashtag4" class="form-control" placeholder="Hashtag">
-                            </div>
+                    
+                        <div class="col-lg-12">
+                            <label>Introduzca al menos un Hashtag a monitorizar</label>
+                        </div>
+                        
+                        <div class="col-lg-12">
+	                        <div class="col-lg-5 program">
+	                        	<div class="form-group titulo"><i class="fa fa-hashtag"></i> Hashtag 1</div>
+	                        	<div class="form-group input-group">
+	                                <span class="input-group-addon"><i class="fa fa-television"></i></span>
+	                                <input type="text" name="program1" class="form-control" placeholder="Programa">
+	                            </div>
+	                            <div class="form-group input-group">
+	                                <span class="input-group-addon"><i class="fa fa-hashtag"></i></span>
+	                                <input type="text" name="hashtag1" class="form-control" required placeholder="Hashtag">
+	                            </div>
+	                        </div>
+	
+	                        <div class="col-lg-5 program">
+	                        	<div class="form-group titulo"><i class="fa fa-hashtag"></i> Hashtag 2</div>
+	                        	<div class="form-group input-group">
+	                                <span class="input-group-addon"><i class="fa fa-television"></i></span>
+	                                <input type="text" name="program2" class="form-control" placeholder="Programa">
+	                            </div>
+	                            <div class="form-group input-group">
+	                                <span class="input-group-addon"><i class="fa fa-hashtag"></i></span>
+	                                <input type="text" name="hashtag2" class="form-control" placeholder="Hashtag">
+	                            </div>
+	                        </div>
+	
+	                        <div class="col-lg-5 program">
+	                        	<div class="form-group titulo"><i class="fa fa-hashtag"></i> Hashtag 3</div>
+	                        	<div class="form-group input-group">
+	                                <span class="input-group-addon"><i class="fa fa-television"></i></span>
+	                                <input type="text" name="program3" class="form-control" placeholder="Programa">
+	                            </div>
+	                            <div class="form-group input-group">
+	                                <span class="input-group-addon"><i class="fa fa-hashtag"></i></span>
+	                                <input type="text" name="hashtag3" class="form-control" placeholder="Hashtag">
+	                            </div>
+	                        </div>
+	
+	                        <div class="col-lg-5 program">
+	                        <div class="form-group titulo"><i class="fa fa-hashtag"></i> Hashtag 4</div>
+	                        	<div class="form-group input-group">
+	                                <span class="input-group-addon"><i class="fa fa-television"></i></span>
+	                                <input type="text" name="progra4" class="form-control" placeholder="Programa">
+	                            </div>
+	                            <div class="form-group input-group">
+	                                <span class="input-group-addon"><i class="fa fa-hashtag"></i></span>
+	                                <input type="text" name="hashtag4" class="form-control" placeholder="Hashtag">
+	                            </div>
+	                        </div>
                         </div>
 
                         <div class="col-lg-6 franja">

@@ -63,27 +63,38 @@
                         <a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="fa fa-fw fa-list"></i> Hashtags <i class="fa fa-fw fa-caret-down"></i></a>
                         <ul id="demo" class="collapse">
                             <li>
-                                <a href="hashtag1"><i class="fa fa-hashtag"></i> Hashtag1</a>
+                                <a href="hashtagDetail?id=${hashtag1.id}"><i class="fa fa-hashtag"></i> <c:out value="${hashtag1.nombre}" /></a>
                             </li>
                             <c:if test="${not empty hashtag2}">                                          
 	                            <li>
-	                                <a href="hashtag2"><i class="fa fa-hashtag"></i> Hashtag2</a>
+	                                <a href="hashtagDetail?id=${hashtag2.id}"><i class="fa fa-hashtag"></i> <c:out value="${hashtag2.nombre}" /></a>
 	                            </li>
                             </c:if>
                             <c:if test="${not empty hashtag3}">
 	                            <li>
-	                                <a href="hashtag3"><i class="fa fa-hashtag"></i> Hashtag3</a>
+	                                <a href="hashtagDetail?id=${hashtag3.id}"><i class="fa fa-hashtag"></i> <c:out value="${hashtag3.nombre}" /></a>
 	                            </li>
                             </c:if>
                             <c:if test="${not empty hashtag4}">
 	                            <li>
-	                                <a href="hashtag4"><i class="fa fa-hashtag"></i> Hashtag4</a>
+	                                <a href="hashtagDetail?id=${hashtag4.id}"><i class="fa fa-hashtag"></i> <c:out value="${hashtag4.nombre}" /></a>
 	                            </li>
                             </c:if>
                         </ul>
                     </li>
                     <li>
-                        <a href="add"><i class="fa fa-fw fa-edit"></i> Añadir Hashtags</a>
+                        <a href="javascript:;" data-toggle="collapse" data-target="#demo2"><i class="fa fa-fw fa-list-ol"></i> Búsquedas anteriores <i class="fa fa-fw fa-caret-down"></i></a>
+                        <ul id="demo2" class="collapse">
+                        
+                        	<c:forEach items="${searchList}" var="search">
+                        		<li>
+	                                <a href="index?searchId=${search.id}"><i class="fa fa-search"></i> <c:out value="${search.nombre}" /></a>
+	                            </li>
+                        	</c:forEach>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="add"><i class="fa fa-fw fa-edit"></i> Configuración de búsqueda</a>
                     </li>
                 </ul>
             </div>
@@ -126,7 +137,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <a href="hashtag1">
+                            <a href="hashtagDetail?id=${hashtag1.id}">
                                 <div class="panel-footer">
                                     <span class="pull-left">Ver detalles</span>
                                     <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -148,7 +159,7 @@
 	                                    </div>
 	                                </div>
 	                            </div>
-	                            <a href="hashtag2">
+	                            <a href="hashtagDetail?id=${hashtag2.id}">
 	                                <div class="panel-footer">
 	                                    <span class="pull-left">Ver detalles</span>
 	                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -171,7 +182,7 @@
 	                                    </div>
 	                                </div>
 	                            </div>
-	                            <a href="hashtag3">
+	                            <a href="hashtagDetail?id=${hashtag3.id}">
 	                                <div class="panel-footer">
 	                                    <span class="pull-left">Ver detalles</span>
 	                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -194,7 +205,7 @@
 	                                    </div>
 	                                </div>
 	                            </div>
-	                            <a href="hashtag4">
+	                            <a href="hashtagDetail?id=${hashtag4.id}">
 	                                <div class="panel-footer">
 	                                    <span class="pull-left">Ver detalles</span>
 	                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -205,25 +216,6 @@
 	                    </div>
 	            	</c:if>
                 </div>
-                <!-- /.List hashtag -->
-
-                <!-- Timeline -->
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="panel panel-blue-black">
-                            <div class="panel-heading">
-                                <h3 class="panel-title"><i class="fa fa-bar-chart-o"></i> Timeline</h3>
-                            </div>
-                            <div class="panel-body">
-                                <div id="morris-line-chart"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- /.Timeline -->
-
-                <!-- /.row -->
-
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="panel panel-yellow">
@@ -329,107 +321,31 @@
     
     <!-- Donut Chart -->
     <script type="text/javascript">
+    	var data = [];
+    	var tweetsCount = [];
+    	var hashtagNames = [];
+	    <c:forEach items="${tweetsCount}" var="i">
+	    	tweetsCount.push("${i}");
+		</c:forEach>
+		<c:forEach items="${hashtagNames}" var="i">
+			hashtagNames.push("${i}");
+		</c:forEach>
+		
+		for(var i = 0; i < tweetsCount.length; i++) {
+			if (hashtagNames[i] != "") {
+				data.push({
+			    	value: tweetsCount[i],
+			        label: "#" + hashtagNames[i]
+			    });
+			}	
+        }
+    
 	    Morris.Donut({
 	        element: 'morris-donut-chart',
-	        data: [{
-	            label: "#" + "${hashtag1.nombre}",
-	            value: "${tweetsCount[0]}"
-	        }, {
-	            label: "#" + "${hashtag2.nombre}",
-	            value: "${tweetsCount[1]}"
-	        }, {
-	            label: "#" + "${hashtag3.nombre}",
-	            value: "${tweetsCount[2]}"
-	        }, {
-	            label: "#" + "${hashtag4.nombre}",
-	            value: "${tweetsCount[3]}"
-	        }],
+	        data: data,
 	        resize: true,
 	        colors: ['#337AB7', '#088A08', '#FF8000', '#d9534f']
 	    });
     </script>
-    
-    <!-- Line Chart -->
-    <script type="text/javascript">
-    	var data = [];
-    	var intervalos = "${intervalos}";
-    	var maxTime = "${maxTime}";
-    	var dateFin = "${dateFin}";
-    	var minTime = "${minTime}";
-    	var dateInicio = "${dateInicio}";
-    	var resta = "${resta}";
-    	
-    	
-    	console.log("intervalos", intervalos);
-    	console.log("maxTime", maxTime);
-    	console.log("dateFin", dateFin);
-    	console.log("minTime", minTime);
-    	console.log("dateInicio", dateInicio);
-    	console.log("resta", resta);
-    	
-    	
-    	function js_yyyy_mm_dd_hh_mm (now) {
-   		  	year = "" + now.getFullYear();
-   		  	month = "" + (now.getMonth() + 1); if (month.length == 1) { month = "0" + month; }
-   		  	day = "" + now.getDate(); if (day.length == 1) { day = "0" + day; }
-   		  	hour = "" + now.getHours(); if (hour.length == 1) { hour = "0" + hour; }
-   		  	minute = "" + now.getMinutes(); if (minute.length == 1) { minute = "0" + minute; }
-   		  	return year + "-" + month + "-" + day + " " + hour + ":" + minute;
-   		}
-    	    	
-    	for(var i = 0; i <= intervalos; i++) {
-    		var fechas = [];
-    		var tweetsH1 = [];
-    		var tweetsH2 = [];
-    		var tweetsH3 = [];
-    		var tweetsH4 = [];
-    		<c:forEach items="${datosH1}" var="dato">
-    			var a = "${dato.intervalo}";
-    			var b = a.split("CEST");
-    			var d = new Date(b[0]);
-				fechas.push(d);
-    			tweetsH1.push("${dato.tweets}");
-			</c:forEach>
-			<c:forEach items="${datosH2}" var="dato">
-				tweetsH2.push("${dato.tweets}");
-			</c:forEach>
-			<c:forEach items="${datosH3}" var="dato">
-				tweetsH3.push("${dato.tweets}");
-			</c:forEach>
-			<c:forEach items="${datosH4}" var="dato">
-				tweetsH4.push("${dato.tweets}");
-			</c:forEach>
-    		var format = js_yyyy_mm_dd_hh_mm(fechas[i]);
-    		data.push({
-    			period: format,
-	            hashtag1: tweetsH1[i],
-	            hashtag2: tweetsH2[i],
-	            hashtag3: tweetsH3[i],
-	            hashtag4: tweetsH4[i]
-    		});
-    	}
-    
-	    Morris.Line({
-	        // ID of the element in which to draw the chart.
-	        element: 'morris-line-chart',
-	        // Chart data records -- each entry in this array corresponds to a point on
-	        // the chart.
-	        data: data,
-	        // The name of the data record attribute that contains x-visitss.
-	        xkey: 'period',
-	        // A list of names of data record attributes that contain y-visitss.
-	        ykeys: ['hashtag1', 'hashtag2', 'hashtag3', 'hashtag4'], // Valores eje y
-	        // Labels for the ykeys -- will be displayed when you hover over the
-	        // chart.
-	        labels: ["${hashtag1.nombre}", "${hashtag2.nombre}", "${hashtag3.nombre}", "${hashtag4.nombre}"],
-	        hideHover: 'auto',
-	        lineColors: ['#337AB7', '#088A08', '#FF8000', '#d9534f'],
-	        // Disables line smoothing
-	        smooth: false,
-	        resize: true
-	    });
-    </script>
-
 </body>
-
 </html>

@@ -7,9 +7,9 @@ import es.upm.dit.isst.quientv.model.Hashtag;
 
 public interface HashtagDAO {
 	
-public Hashtag newHashtag(String nombre, Date fechaInicio, Date fechaFin);
+public Hashtag newHashtag(String nombre, Date fechaInicio, Date fechaFin, String busquedaId, String programa);
 	
-	public Hashtag getHashtag(int id);
+	public Hashtag getHashtag(String id);
 	
 	public List<Hashtag> getHashtagList();
 	
@@ -18,5 +18,7 @@ public Hashtag newHashtag(String nombre, Date fechaInicio, Date fechaFin);
 	public void deleteHashtag(String id);
 
 	public List<Hashtag> getHashtagListInSearchPeriod();
+	
+	public List<Hashtag> getHashtagListByBusquedaId(String busquedaId);
 
 }

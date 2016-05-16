@@ -24,10 +24,10 @@ public class HashtagDAOImpl implements HashtagDAO {
 	}
 
 	@Override
-	public Hashtag newHashtag(String nombre, Date fechaInicio, Date fechaFin) {
+	public Hashtag newHashtag(String nombre, Date fechaInicio, Date fechaFin, String busquedaId, String programa) {
 		Hashtag hashtag = null;
 		EntityManager em = EMFService.get().createEntityManager();
-		hashtag = new Hashtag(nombre, fechaInicio, fechaFin);
+		hashtag = new Hashtag(nombre, fechaInicio, fechaFin, busquedaId, programa);
 		em.persist(hashtag);
 		
 		em.close();
@@ -35,7 +35,7 @@ public class HashtagDAOImpl implements HashtagDAO {
 	}
 
 	@Override
-	public Hashtag getHashtag(int id) {
+	public Hashtag getHashtag(String id) {
 		EntityManager em = EMFService.get().createEntityManager();
 		Query q = em.createQuery("select h from Hashtag h where h.id = :id");
 		q.setParameter("id", id);
@@ -52,7 +52,7 @@ public class HashtagDAOImpl implements HashtagDAO {
 	@Override
 	public List<Hashtag> getHashtagList() {
 		EntityManager em = EMFService.get().createEntityManager();
-		Query q = em.createQuery("select h from Hashtag h order by h.createdat asc ");
+		Query q = em.createQuery("select h from Hashtag h order by h.createdat asc");
 		List<Hashtag> res = q.getResultList();
 		
 		em.close();
@@ -72,6 +72,23 @@ public class HashtagDAOImpl implements HashtagDAO {
 				res.remove(hashtag);
 			}
 		};
+		
+		em.close();
+		return res;
+	}
+	
+	@Override
+	public List<Hashtag> getHashtagListByBusquedaId(String busquedaId) {
+		EntityManager em = EMFService.get().createEntityManager();
+		List<Hashtag> res;
+		if (busquedaId.equals("vacio")) {
+			res = getHashtagList();
+		} else {
+			Query q = null;
+			q = em.createQuery("SELECT h FROM Hashtag h WHERE h.busquedaId = :busquedaId order by h.createdat asc").setParameter("busquedaId", busquedaId);
+
+			res = q.getResultList();
+		}
 		
 		em.close();
 		return res;
