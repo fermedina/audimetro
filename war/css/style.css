@@ -405,6 +405,24 @@ ul.alert-dropdown {
     }
 }
 
+.program {
+	border: 1px solid #BDBDBD;
+	border-radius: 5px;
+	margin: 0px 20px 10px 0px;
+	padding: 0px;
+}
+
+.program .titulo {
+	background-color: #BDBDBD;
+	padding: 8px 4px 8px 15px;
+	color: #fff;
+}
+
+.program .input-group {
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
 
 
 
