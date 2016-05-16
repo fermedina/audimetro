@@ -144,14 +144,14 @@
                         <div class="col-lg-4">
                             <div class="form-group input-group">
                                 <span class="input-group-addon"><i class="fa fa-user"></i></span>
-                                <input type="text" name="name" class="form-control" placeholder="Nombre">
+                                <input type="text" name="name" class="form-control" required placeholder="Nombre">
                             </div>
                         </div>
                         
                         <div class="col-lg-4">
                             <div class="form-group input-group">
                                 <span class="input-group-addon"><i class="fa fa-briefcase"></i></span>
-                                <input type="text" name="cif" class="form-control" placeholder="CIF">
+                                <input type="text" name="cif" class="form-control" required placeholder="CIF">
                             </div>
                         </div>
                     
@@ -164,7 +164,7 @@
 	                        	<div class="form-group titulo"><i class="fa fa-hashtag"></i> Hashtag 1</div>
 	                        	<div class="form-group input-group">
 	                                <span class="input-group-addon"><i class="fa fa-television"></i></span>
-	                                <input type="text" name="program1" class="form-control" placeholder="Programa">
+	                                <input type="text" name="program1" class="form-control" required placeholder="Programa">
 	                            </div>
 	                            <div class="form-group input-group">
 	                                <span class="input-group-addon"><i class="fa fa-hashtag"></i></span>

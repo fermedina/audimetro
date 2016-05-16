@@ -63,9 +63,13 @@ public class SearchServlet extends HttpServlet {
 				QueryResult result = twitter.search(query);
 
 				for (Status status : result.getTweets()) {
-					Tweet tweet = new Tweet (hashtagDao.getHashtagList().get(i).getId(), 
+					if (status.getGeoLocation() != null) {
+						localizacion = getProvincia(status.getGeoLocation().getLatitude(), status.getGeoLocation().getLongitude());
+					}
+					
+					Tweet tweet = new Tweet (hashtagDao.getHashtagListInSearchPeriod().get(i).getId(), 
 												status.getText(), status.getLang(), 
-												status.getUser().getLocation(), 
+												localizacion, 
 												status.getUser().getScreenName(), 
 												urlTwitter + status.getUser().getScreenName(), 
 												status.getUser().getProfileImageURL(), 
