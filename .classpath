@@ -10,5 +10,6 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/twitter4j-core-4.0.4.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/commons-io-2.5.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/json-20160212.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/commons-codec-1.9.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

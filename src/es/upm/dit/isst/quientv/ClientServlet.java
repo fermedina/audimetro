@@ -24,7 +24,7 @@ import es.upm.dit.isst.quientv.model.Tweet;
 import es.upm.dit.isst.utilities.Utilities;
 
 @SuppressWarnings("serial")
-public class IndexServlet extends HttpServlet {
+public class ClientServlet extends HttpServlet {
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
 		resp.setContentType("text/plain");
 
@@ -36,31 +36,21 @@ public class IndexServlet extends HttpServlet {
 		req.setAttribute("searchList", searchList);
 		
 		// Id de la búsqueda que queremos ver
-		String inputBusquedaId = req.getParameter("searchId");
-		
-		String busquedaId;
-		Busqueda busqueda = null;
-		
-		//Si entramos en la vista Index sin id de búsqueda, visualizamos datos de la última búsqueda
-		if (inputBusquedaId == null) {
-			if (searchList.size() > 0) {
-				busquedaId = searchList.get(searchList.size() - 1).getId();
-				busqueda = busquedaDao.getBusqueda(busquedaId);
-			} else {
-				busquedaId = "vacio";
-			}			
-		} else {
-			busquedaId = inputBusquedaId;
-			busqueda = busquedaDao.getBusqueda(busquedaId);
+		String busquedaEncript = req.getParameter("searchId");
+		req.setAttribute("client", busquedaEncript);
+
+		String inputBusquedaId = "";
+		try {
+			inputBusquedaId = Utilities.desencriptar(busquedaEncript.replace(' ','+'));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		
+		Busqueda busqueda = busquedaDao.getBusqueda(inputBusquedaId);		
 		req.setAttribute("busqueda", busqueda);
 		
-		//Encriptamos el id de búsqueda para el cliente
-		String encriptado = Utilities.encriptar(busquedaId);
-		req.setAttribute("busquedaId", encriptado);
-		
-		List<Hashtag> hashtags = hashtagDao.getHashtagListByBusquedaId(busquedaId);
+		List<Hashtag> hashtags = hashtagDao.getHashtagListByBusquedaId(inputBusquedaId);
 		List<Tweet> allTweets = tweetDao.getTweetList();
 		ArrayList<Tweet> insertedTweets = new ArrayList<Tweet>();
 		
@@ -76,6 +66,7 @@ public class IndexServlet extends HttpServlet {
 				
 		if (hashtags.size() > 0) {
 			Hashtag hashtag1 = hashtags.get(0);
+			
 			Hashtag hashtag2 = null;
 			Hashtag hashtag3 = null;
 			Hashtag hashtag4 = null;
@@ -84,19 +75,14 @@ public class IndexServlet extends HttpServlet {
 				hashtag2 = hashtags.get(1);
 			}
 			if (hashtags.size() == 3) {
-				hashtag2 = hashtags.get(1);
+				hashtag2 = hashtags.get(1);				
 				hashtag3 = hashtags.get(2);
 			}
 			if (hashtags.size() == 4) {
-				hashtag2 = hashtags.get(1);
-				hashtag3 = hashtags.get(2);
+				hashtag2 = hashtags.get(1);				
+				hashtag3 = hashtags.get(2);				
 				hashtag4 = hashtags.get(3);
 			}
-
-			req.setAttribute("hashtag1", hashtag1);
-			req.setAttribute("hashtag2", hashtag2);
-			req.setAttribute("hashtag3", hashtag3);
-			req.setAttribute("hashtag4", hashtag4);
 
 			// Si hay tweets insertados en la base de datos: extraigo 8 usuarios y sus tweets para la tabla "Últimos tweets"
 			if (insertedTweets.size() > 0) {
@@ -152,6 +138,27 @@ public class IndexServlet extends HttpServlet {
 				req.setAttribute("tweetsCount", tweetsCount);
 				req.setAttribute("retweetsCount", retweetsCount);
 				req.setAttribute("favCount", favCount);
+				
+				String encriptH1Id = Utilities.encriptar(hashtag1.getId());
+				hashtag1.setId(encriptH1Id);
+				
+				if (hashtag2 != null) {
+					String encriptH2Id = Utilities.encriptar(hashtag2.getId());
+					hashtag2.setId(encriptH2Id);
+				}
+				if (hashtag3 != null) {
+					String encriptH3Id = Utilities.encriptar(hashtag3.getId());
+					hashtag3.setId(encriptH3Id);
+				}
+				if (hashtag4 != null) {
+					String encriptH4Id = Utilities.encriptar(hashtag4.getId());
+					hashtag4.setId(encriptH4Id);
+				}
+				
+				req.setAttribute("hashtag1", hashtag1);
+				req.setAttribute("hashtag2", hashtag2);
+				req.setAttribute("hashtag3", hashtag3);
+				req.setAttribute("hashtag4", hashtag4);
 			}
 
 			RequestDispatcher view = req.getRequestDispatcher("/jsp/index.jsp");
@@ -161,67 +168,5 @@ public class IndexServlet extends HttpServlet {
 			RequestDispatcher view = req.getRequestDispatcher("/jsp/add.jsp");
 			view.forward(req, resp);
 		}	
-	}
-
-	public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-		String hashtag1 = req.getParameter("hashtag1");
-		String hashtag2 = req.getParameter("hashtag2");
-		String hashtag3 = req.getParameter("hashtag3");
-		String hashtag4 = req.getParameter("hashtag4");
-
-		String horaFinInput = req.getParameter("hora_fin");		
-		String franjaHorariaInicio = req.getParameter("fecha_inicio");
-		String franjaHorariaFin = req.getParameter("fecha_fin");
-		
-		Date dateInicio; // Momento de inicio de la búsqueda
-		Date dateFin; // Momento de fin de la búsqueda
-		
-		TimeZone.setDefault(TimeZone.getTimeZone("GMT+2:00"));
-		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");		
-
-		BusquedaDAO busquedaDao = BusquedaDAOImpl.getInstance();
-		HashtagDAO hashtagDao = HashtagDAOImpl.getInstance();
-
-		if (hashtag1 != null) {
-
-			// Obtenemos los hashtags almacenados y los borramos antes de guardar los nuevos
-			/*for(Hashtag hashtag: hashtagDao.getHashtagList()) {
-				hashtagDao.deleteHashtag(hashtag.getId());
-			};*/
-
-			try {			
-				if (!franjaHorariaInicio.isEmpty() && !franjaHorariaFin.isEmpty()) {
-					dateInicio = df.parse(franjaHorariaInicio);
-					dateFin = df.parse(franjaHorariaFin);
-				} else {
-					dateInicio = new Date();
-					dateFin = df.parse(horaFinInput);
-				}
-				
-				Busqueda busqueda = busquedaDao.newBusqueda(req.getParameter("busqueda"), req.getParameter("name"), req.getParameter("cif"));
-								
-				// Guardamos los nuevos hashtags
-				hashtagDao.newHashtag(hashtag1, dateInicio, dateFin, busqueda.getId(), req.getParameter("program1"));
-
-				if (!hashtag2.isEmpty()) { hashtagDao.newHashtag(hashtag2, dateInicio, dateFin, busqueda.getId(), req.getParameter("program2")); }
-				if (!hashtag3.isEmpty()) { hashtagDao.newHashtag(hashtag3, dateInicio, dateFin, busqueda.getId(), req.getParameter("program3")); }
-				if (!hashtag4.isEmpty()) { hashtagDao.newHashtag(hashtag4, dateInicio, dateFin, busqueda.getId(), req.getParameter("program4")); }
-
-			} catch (ParseException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			RequestDispatcher view = req.getRequestDispatcher("/jsp/add.jsp");
-			view.forward(req, resp);
-			
-			/*if (!horaFinInput.isEmpty()) {
-				RequestDispatcher rd= req.getRequestDispatcher("/search");
-				rd.include(req, resp);
-			} else {
-				RequestDispatcher view = req.getRequestDispatcher("/jsp/add.jsp");
-				view.forward(req, resp);
-			}*/		
-		}
 	}
 }

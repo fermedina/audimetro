@@ -12,6 +12,7 @@ war/WEB-INF/classes/
 !twitter4j-core-4.0.4.jar
 !commons-io-2.5.jar
 !json-20160212.jar
+!commons-codec-1.9.jar
 *.war
 
 #Mac
