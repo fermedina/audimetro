@@ -38,17 +38,22 @@ public class IndexServlet extends HttpServlet {
 		String inputBusquedaId = req.getParameter("searchId");
 		
 		String busquedaId;
+		Busqueda busqueda = null;
 		
 		//Si entramos en la vista Index sin id de búsqueda, visualizamos datos de la última búsqueda
 		if (inputBusquedaId == null) {
 			if (searchList.size() > 0) {
 				busquedaId = searchList.get(searchList.size() - 1).getId();
+				busqueda = busquedaDao.getBusqueda(busquedaId);
 			} else {
 				busquedaId = "vacio";
 			}			
 		} else {
 			busquedaId = inputBusquedaId;
+			busqueda = busquedaDao.getBusqueda(busquedaId);
 		}
+		
+		req.setAttribute("busqueda", busqueda);
 		
 		List<Hashtag> hashtags = hashtagDao.getHashtagListByBusquedaId(busquedaId);
 		List<Tweet> allTweets = tweetDao.getTweetList();
@@ -61,6 +66,8 @@ public class IndexServlet extends HttpServlet {
 				}
 			}
 		}
+		
+		req.setAttribute("insertedTweets", insertedTweets);
 				
 		if (hashtags.size() > 0) {
 			Hashtag hashtag1 = hashtags.get(0);
@@ -200,7 +207,7 @@ public class IndexServlet extends HttpServlet {
 				e.printStackTrace();
 			}
 			
-			RequestDispatcher view = req.getRequestDispatcher("/jsp/index.jsp");
+			RequestDispatcher view = req.getRequestDispatcher("/jsp/add.jsp");
 			view.forward(req, resp);
 			
 			/*if (!horaFinInput.isEmpty()) {

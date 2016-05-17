@@ -60,29 +60,6 @@
                         <a href="index"><i class="fa fa-home"></i> Inicio</a>
                     </li>
                     <li>
-                        <a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="fa fa-fw fa-list"></i> Hashtags <i class="fa fa-fw fa-caret-down"></i></a>
-                        <ul id="demo" class="collapse">
-                            <li>
-                                <a href="hashtagDetail?id=${hashtag1.id}"><i class="fa fa-hashtag"></i> <c:out value="${hashtag1.nombre}" /></a>
-                            </li>
-                            <c:if test="${not empty hashtag2}">                                          
-	                            <li>
-	                                <a href="hashtagDetail?id=${hashtag2.id}"><i class="fa fa-hashtag"></i> <c:out value="${hashtag2.nombre}" /></a>
-	                            </li>
-                            </c:if>
-                            <c:if test="${not empty hashtag3}">
-	                            <li>
-	                                <a href="hashtagDetail?id=${hashtag3.id}"><i class="fa fa-hashtag"></i> <c:out value="${hashtag3.nombre}" /></a>
-	                            </li>
-                            </c:if>
-                            <c:if test="${not empty hashtag4}">
-	                            <li>
-	                                <a href="hashtagDetail?id=${hashtag4.id}"><i class="fa fa-hashtag"></i> <c:out value="${hashtag4.nombre}" /></a>
-	                            </li>
-                            </c:if>
-                        </ul>
-                    </li>
-                    <li>
                         <a href="javascript:;" data-toggle="collapse" data-target="#demo2"><i class="fa fa-fw fa-list-ol"></i> Búsquedas anteriores <i class="fa fa-fw fa-caret-down"></i></a>
                         <ul id="demo2" class="collapse">
                         
@@ -93,6 +70,31 @@
                         	</c:forEach>
                         </ul>
                     </li>
+                    <c:if test="${not empty insertedTweets}">
+	                    <li>
+	                        <a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="fa fa-fw fa-list"></i> Hashtags <i class="fa fa-fw fa-caret-down"></i></a>
+	                        <ul id="demo" class="collapse">
+	                            <li>
+	                                <a href="hashtagDetail?id=${hashtag1.id}"><i class="fa fa-hashtag"></i> <c:out value="${hashtag1.nombre}" /></a>
+	                            </li>
+	                            <c:if test="${not empty hashtag2}">                                          
+		                            <li>
+		                                <a href="hashtagDetail?id=${hashtag2.id}"><i class="fa fa-hashtag"></i> <c:out value="${hashtag2.nombre}" /></a>
+		                            </li>
+	                            </c:if>
+	                            <c:if test="${not empty hashtag3}">
+		                            <li>
+		                                <a href="hashtagDetail?id=${hashtag3.id}"><i class="fa fa-hashtag"></i> <c:out value="${hashtag3.nombre}" /></a>
+		                            </li>
+	                            </c:if>
+	                            <c:if test="${not empty hashtag4}">
+		                            <li>
+		                                <a href="hashtagDetail?id=${hashtag4.id}"><i class="fa fa-hashtag"></i> <c:out value="${hashtag4.nombre}" /></a>
+		                            </li>
+	                            </c:if>
+	                        </ul>
+	                    </li>
+                    </c:if>
                     <li>
                         <a href="add"><i class="fa fa-fw fa-edit"></i> Configuración de búsqueda</a>
                     </li>
@@ -110,15 +112,58 @@
                     <div class="col-lg-12">
                         <h1 class="page-header">
                             Hashtags <small>monitorizados</small>
-                            <span><c:out value="${fecha}" /></span>
-                            <!-- <span class="franja-horaria">Prime-Time</span> -->
                         </h1>
-                            
+   
                         <ol class="breadcrumb">
                             <li class="active">
                                 <i class="fa fa-list"></i> Hashtags
                             </li>
                         </ol>
+                        
+                        <div class="panel panel-purple">
+					    	<div class="panel-heading"><i class="fa fa-info-circle"></i> Información de Búsqueda</div>
+					    	<div class="panel-body">
+					    		<div class="col-lg-4 info_client">
+						    		<div class="input-group">
+										<span class="input-group-addon" id="basic-addon1"><i class="fa fa-search"></i> Identificador</span>
+									  	<input type="text" class="form-control" disabled value="${busqueda.nombre}" aria-describedby="basic-addon1">
+									</div>
+								</div>
+								
+					    		<div class="col-lg-4 info_client">
+						    		<div class="input-group">
+										<span class="input-group-addon" id="basic-addon1"><i class="fa fa-user"></i> Cliente</span>
+									  	<input type="text" class="form-control" disabled value="${busqueda.nombreCliente}" aria-describedby="basic-addon1">
+									</div>
+								</div>
+								
+								<div class="col-lg-4 info_client">
+						    		<div class="input-group">
+										<span class="input-group-addon" id="basic-addon1"><i class="fa fa-briefcase"></i> CIF</span>
+									  	<input type="text" class="form-control" disabled value="${busqueda.cif}" aria-describedby="basic-addon1">
+									</div>
+								</div>
+								
+								<div class="col-lg-6 info_client">
+						    		<div class="input-group">
+										<span class="input-group-addon" id="basic-addon1"><i class="fa fa-clock-o"></i> Fecha inicio</span>
+									  	<input type="text" class="form-control" disabled value="${hashtag1.fechaInicio}" aria-describedby="basic-addon1">
+									</div>
+								</div>
+								
+								<div class="col-lg-6 info_client">
+						    		<div class="input-group">
+										<span class="input-group-addon" id="basic-addon1"><i class="fa fa-clock-o"></i> Fecha fin</span>
+									  	<input type="text" class="form-control" disabled value="${hashtag1.fechaFin}" aria-describedby="basic-addon1">
+									</div>
+								</div>
+								
+								<!--<div class="col-lg-6 info_client">
+									<span class="titulo">Obtener enlace de monitorización:</span>
+						    		<button type="button" class="btn btn-info">Enlace</button>
+								</div>-->
+					  		</div>
+						</div>
                     </div>
                 </div>
                 <!-- /.row -->
@@ -135,15 +180,18 @@
                                     <div class="col-xs-9">
                                         <div class="huge"><c:out value="${hashtag1.nombre}" /></div>
                                     </div>
+                                    <span class="program_name"><c:out value="${hashtag1.programa}" /></span>
                                 </div>
                             </div>
-                            <a href="hashtagDetail?id=${hashtag1.id}">
-                                <div class="panel-footer">
-                                    <span class="pull-left">Ver detalles</span>
-                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-                                    <div class="clearfix"></div>
-                                </div>
-                            </a>
+                            <c:if test="${not empty insertedTweets}">
+	                            <a href="hashtagDetail?id=${hashtag1.id}">
+	                                <div class="panel-footer">
+	                                    <span class="pull-left">Ver detalles</span>
+	                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+	                                    <div class="clearfix"></div>
+	                                </div>
+	                            </a>
+	                        </c:if>
                         </div>
                     </div>
                     <c:if test="${not empty hashtag2}">
@@ -157,15 +205,18 @@
 	                                    <div class="col-xs-9">
 	                                        <div class="huge"><c:out value="${hashtag2.nombre}" /></div>
 	                                    </div>
+	                                    <span class="program_name"><c:out value="${hashtag2.programa}" /></span>
 	                                </div>
 	                            </div>
-	                            <a href="hashtagDetail?id=${hashtag2.id}">
-	                                <div class="panel-footer">
-	                                    <span class="pull-left">Ver detalles</span>
-	                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-	                                    <div class="clearfix"></div>
-	                                </div>
-	                            </a>
+	                            <c:if test="${not empty insertedTweets}">
+		                            <a href="hashtagDetail?id=${hashtag2.id}">
+		                                <div class="panel-footer">
+		                                    <span class="pull-left">Ver detalles</span>
+		                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+		                                    <div class="clearfix"></div>
+		                                </div>
+		                            </a>
+		                        </c:if>    
 	                        </div>
 	                    </div>
 					</c:if>
@@ -180,15 +231,18 @@
 	                                    <div class="col-xs-9">
 	                                        <div class="huge"><c:out value="${hashtag3.nombre}" /></div>
 	                                    </div>
+	                                    <span class="program_name"><c:out value="${hashtag3.programa}" /></span>
 	                                </div>
 	                            </div>
-	                            <a href="hashtagDetail?id=${hashtag3.id}">
-	                                <div class="panel-footer">
-	                                    <span class="pull-left">Ver detalles</span>
-	                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-	                                    <div class="clearfix"></div>
-	                                </div>
-	                            </a>
+	                            <c:if test="${not empty insertedTweets}">
+		                            <a href="hashtagDetail?id=${hashtag3.id}">
+		                                <div class="panel-footer">
+		                                    <span class="pull-left">Ver detalles</span>
+		                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+		                                    <div class="clearfix"></div>
+		                                </div>
+		                            </a>
+		                        </c:if>    
 	                        </div>
 	                    </div>
 	                </c:if>
@@ -203,101 +257,106 @@
 	                                    <div class="col-xs-9">
 	                                        <div class="huge"><c:out value="${hashtag4.nombre}" /></div>
 	                                    </div>
+	                                    <span class="program_name"><c:out value="${hashtag4.programa}" /></span>
 	                                </div>
 	                            </div>
-	                            <a href="hashtagDetail?id=${hashtag4.id}">
-	                                <div class="panel-footer">
-	                                    <span class="pull-left">Ver detalles</span>
-	                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
-	                                    <div class="clearfix"></div>
-	                                </div>
-	                            </a>
+	                            <c:if test="${not empty insertedTweets}">
+		                            <a href="hashtagDetail?id=${hashtag4.id}">
+		                                <div class="panel-footer">
+		                                    <span class="pull-left">Ver detalles</span>
+		                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+		                                    <div class="clearfix"></div>
+		                                </div>
+		                            </a>
+		                        </c:if>
 	                        </div>
 	                    </div>
 	            	</c:if>
                 </div>
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="panel panel-yellow">
-                            <div class="panel-heading">
-                                <h3 class="panel-title"><i class="fa fa-plus"></i> Tweets totales</h3>
-                            </div>
-                            <div class="panel-body">
-                                <div id="morris-donut-chart"></div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="col-lg-6">
-                        <div class="panel panel-green">
-                            <div class="panel-heading">
-                                <h3 class="panel-title"><i class="fa fa-server"></i> Últimos tweets</h3>
-                            </div>
-                            <div class="panel-body">
-                                <div class="list-group">
-                                
-                                	<c:forEach items="${lastTweets}" var="tweet">
-										<a href="#" class="list-group-item">
-	                                        <span class="badge"><c:out value="${tweet.usuario}" /></span>
-	                                        <i class="fa fa-fw fa-twitter"></i> <c:out value="${tweet.texto}" />
-	                                    </a>
-									</c:forEach>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="panel panel-red">
-                            <div class="panel-heading">
-                                <h3 class="panel-title"><i class="fa fa-clock-o"></i> Actividad</h3>
-                            </div>
-                            <div class="panel-body">
-                                <div class="table-responsive">
-                                    <table class="table table-bordered table-hover table-striped">
-                                        <thead>
-                                            <tr>
-                                                <th><i class="fa fa-hashtag"></i></th>
-                                                <th><i class="fa fa-retweet"></i></th>
-                                                <th><i class="fa fa-heart"></i></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td><c:out value="${hashtag1.nombre}" /></td>
-                                                <td><c:out value="${retweetsCount[0]}" /></td>
-                                                <td><c:out value="${favCount[0]}" /></td>
-                                            </tr>
-                                            <c:if test="${not empty hashtag2}">
+                <c:if test="${not empty insertedTweets}">            
+	                <div class="row">
+	                    <div class="col-lg-6">
+	                        <div class="panel panel-yellow">
+	                            <div class="panel-heading">
+	                                <h3 class="panel-title"><i class="fa fa-plus"></i> Tweets totales</h3>
+	                            </div>
+	                            <div class="panel-body">
+	                                <div id="morris-donut-chart"></div>
+	                            </div>
+	                        </div>
+	                    </div>
+	                    
+	                    <div class="col-lg-6">
+	                        <div class="panel panel-green">
+	                            <div class="panel-heading">
+	                                <h3 class="panel-title"><i class="fa fa-server"></i> Últimos tweets</h3>
+	                            </div>
+	                            <div class="panel-body">
+	                                <div class="list-group">
+	                                
+	                                	<c:forEach items="${lastTweets}" var="tweet">
+											<a href="#" class="list-group-item">
+		                                        <span class="badge"><c:out value="${tweet.usuario}" /></span>
+		                                        <i class="fa fa-fw fa-twitter"></i> <c:out value="${tweet.texto}" />
+		                                    </a>
+										</c:forEach>
+	                                </div>
+	                            </div>
+	                        </div>
+	                    </div>
+	                </div>
+	
+	                <div class="row">
+	                    <div class="col-lg-12">
+	                        <div class="panel panel-red">
+	                            <div class="panel-heading">
+	                                <h3 class="panel-title"><i class="fa fa-clock-o"></i> Actividad</h3>
+	                            </div>
+	                            <div class="panel-body">
+	                                <div class="table-responsive">
+	                                    <table class="table table-bordered table-hover table-striped">
+	                                        <thead>
 	                                            <tr>
-	                                                <td><c:out value="${hashtag2.nombre}" /></td>
-	                                                <td><c:out value="${retweetsCount[1]}" /></td>
-	                                                <td><c:out value="${favCount[1]}" /></td>
+	                                                <th><i class="fa fa-hashtag"></i></th>
+	                                                <th><i class="fa fa-retweet"></i></th>
+	                                                <th><i class="fa fa-heart"></i></th>
 	                                            </tr>
-                                            </c:if>
-                                            <c:if test="${not empty hashtag3}">
+	                                        </thead>
+	                                        <tbody>
 	                                            <tr>
-	                                                <td><c:out value="${hashtag3.nombre}" /></td>
-	                                                <td><c:out value="${retweetsCount[2]}" /></td>
-	                                                <td><c:out value="${favCount[2]}" /></td>
+	                                                <td><c:out value="${hashtag1.nombre}" /></td>
+	                                                <td><c:out value="${retweetsCount[0]}" /></td>
+	                                                <td><c:out value="${favCount[0]}" /></td>
 	                                            </tr>
-                                            </c:if>
-                                            <c:if test="${not empty hashtag4}">
-	                                            <tr>
-	                                                <td><c:out value="${hashtag4.nombre}" /></td>
-	                                                <td><c:out value="${retweetsCount[3]}" /></td>
-	                                                <td><c:out value="${favCount[3]}" /></td>
-	                                            </tr>
-                                            </c:if>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>    
-                </div>
+	                                            <c:if test="${not empty hashtag2}">
+		                                            <tr>
+		                                                <td><c:out value="${hashtag2.nombre}" /></td>
+		                                                <td><c:out value="${retweetsCount[1]}" /></td>
+		                                                <td><c:out value="${favCount[1]}" /></td>
+		                                            </tr>
+	                                            </c:if>
+	                                            <c:if test="${not empty hashtag3}">
+		                                            <tr>
+		                                                <td><c:out value="${hashtag3.nombre}" /></td>
+		                                                <td><c:out value="${retweetsCount[2]}" /></td>
+		                                                <td><c:out value="${favCount[2]}" /></td>
+		                                            </tr>
+	                                            </c:if>
+	                                            <c:if test="${not empty hashtag4}">
+		                                            <tr>
+		                                                <td><c:out value="${hashtag4.nombre}" /></td>
+		                                                <td><c:out value="${retweetsCount[3]}" /></td>
+		                                                <td><c:out value="${favCount[3]}" /></td>
+		                                            </tr>
+	                                            </c:if>
+	                                        </tbody>
+	                                    </table>
+	                                </div>
+	                            </div>
+	                        </div>
+	                    </div>    
+	                </div>
+                </c:if>
                 <!-- /.row -->
 
             </div>
