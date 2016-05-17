@@ -423,6 +423,19 @@ ul.alert-dropdown {
 	margin-right: 10px;
 }
 
+.program_name {
+	font-style: italic;
+	float: right;
+    margin-right: 8px;
+}
+
+.info_client {
+	margin-bottom: 10px;
+}
+
+.info_client .titulo {
+	margin-right: 10px;
+}
 
 
 
