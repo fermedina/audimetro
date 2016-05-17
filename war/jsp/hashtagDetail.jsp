@@ -155,7 +155,7 @@
                 <!-- Page Heading -->
                 <div class="row">
                     <div class="col-lg-12">
-                        <h1 class="page-header"><i class="fa fa-hashtag"></i><c:out value="${hashtag.nombre}" /><small> detalles</small>
+                        <h1 class="page-header"><i class="fa fa-hashtag"></i><c:out value="${hashtag.nombre}" /><small> <c:out value="${hashtag.programa}" /></small>
                         <!-- <span class="franja-horaria">Prime-Time</span> -->
                         </h1>
                         <ol class="breadcrumb">
