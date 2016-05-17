@@ -90,9 +90,6 @@ public class HashtagDetailServlet extends HttpServlet {
 		int favsCount = 0;
 		
 		ArrayList<String> users = new ArrayList<String>();
-		ArrayList<String> links = new ArrayList<String>();
-		ArrayList<Integer> followers = new ArrayList<Integer>();
-		ArrayList<String> avatars = new ArrayList<String>();
 		
 		for(Tweet tweet : tweetsOfHashtag) {
 			retweetsCount += tweet.getRetweets(); // Sumamos los retweets
@@ -129,11 +126,8 @@ public class HashtagDetailServlet extends HttpServlet {
 				locationFrecuencies.set(index, value);
 			}
 			
-			// Obtenemos los usuarios, sus links, sus seguidores y sus imágenes de perfil de todos los tweets para después obtener el top 5
+			// Obtenemos los usuarios para después obtener el top 5
 			users.add(tweet.getUsuario());
-			links.add(tweet.getLinkProfile());
-			followers.add(tweet.getSeguidoresUsuario());
-			avatars.add(tweet.getAvatar());
 		}		
 		
 		req.setAttribute("languages", languages);
@@ -146,45 +140,56 @@ public class HashtagDetailServlet extends HttpServlet {
 		req.setAttribute("favsCount", favsCount);
 		
 		// Obtenemos la frecuencia con la que aparecen los usuarios en la lista de tweets
-		Set<String> mySet = new HashSet<String>(users);
+		Set<String> setUsers = new HashSet<String>(users);
 		ArrayList<String> topUsers = new ArrayList<String>();
+		ArrayList<String> topLinks = new ArrayList<String>();
+		ArrayList<Integer> topFollowers = new ArrayList<Integer>();
+		ArrayList<String> topAvatars = new ArrayList<String>();
 		ArrayList<Integer> frecuencies = new ArrayList<Integer>();
-		for(String s: mySet){
+		
+		for(String s: setUsers){
 			topUsers.add(s);
-			frecuencies.add(Collections.frequency(users,s));			
+			frecuencies.add(Collections.frequency(users,s));
+			
+			List<Tweet> tweetsOfUser = tweetDao.getTweetListByUserAndHashtagId(hashtagId, s);
+			if (tweetsOfUser.size() > 0) {
+				topLinks.add(tweetsOfUser.get(0).getLinkProfile());
+				topFollowers.add(tweetsOfUser.get(0).getSeguidoresUsuario());
+				topAvatars.add(tweetsOfUser.get(0).getAvatar());
+			}	
 		}
 		
 		// Ordenamos los arrays de los usuarios, los links, los seguidores y los avatares en función de la frecuencia con la que aparece el usuario
 		// para quedarnos en la vista con los 5 más habituales
-		for(int i = 0; i<frecuencies.size() - 1; i++){
+		for(int i = 0; i<frecuencies.size()-1; i++){
             for(int j=i+1; j<frecuencies.size(); j++){
                 if(frecuencies.get(i) < frecuencies.get(j)){
                     //Intercambiamos valores
                     String variableAuxiliar1 = topUsers.get(i);
                     int variableAuxiliar2 = frecuencies.get(i);
-                    String variableAuxiliar3 = links.get(i);
-                    int variableAuxiliar4 = followers.get(i);
-                    String variableAuxiliar5 = avatars.get(i);
+                    String variableAuxiliar3 = topLinks.get(i);
+                    int variableAuxiliar4 = topFollowers.get(i);
+                    String variableAuxiliar5 = topAvatars.get(i);
                                                          
                     topUsers.set(i, topUsers.get(j));
                     topUsers.set(j, variableAuxiliar1);
                     frecuencies.set(i, frecuencies.get(j));
                     frecuencies.set(j, variableAuxiliar2);
-                    links.set(i, links.get(j));
-                    links.set(j, variableAuxiliar3);
-                    followers.set(i, followers.get(j));
-                    followers.set(j, variableAuxiliar4);
-                    avatars.set(i, avatars.get(j));
-                    avatars.set(j, variableAuxiliar5);
+                    topLinks.set(i, topLinks.get(j));
+                    topLinks.set(j, variableAuxiliar3);
+                    topFollowers.set(i, topFollowers.get(j));
+                    topFollowers.set(j, variableAuxiliar4);
+                    topAvatars.set(i, topAvatars.get(j));
+                    topAvatars.set(j, variableAuxiliar5);
                 }
             }
         }
 		
 		req.setAttribute("topUsers", topUsers);
 		req.setAttribute("topFrecuencies", frecuencies);
-		req.setAttribute("topLinks", links);
-		req.setAttribute("topFollowers", followers);
-		req.setAttribute("topAvatars", avatars);
+		req.setAttribute("topLinks", topLinks);
+		req.setAttribute("topFollowers", topFollowers);
+		req.setAttribute("topAvatars", topAvatars);
 		
 		RequestDispatcher view = req.getRequestDispatcher("/jsp/hashtagDetail.jsp");
 		view.forward(req, resp);
