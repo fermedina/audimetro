@@ -53,7 +53,14 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index"><img src="img/logo.png"></a>
+                <c:if test="${not empty client}">
+                	<a class="navbar-brand" href="client?searchId=${client}">
+                </c:if>
+                <c:if test="${empty client}">
+                	<a class="navbar-brand" href="index">
+                </c:if>
+                	<img src="img/logo.png">
+                </a>
             </div>
 
             <!-- Sidebar Menu Items - These collapse to the responsive navigation menu on small screens -->

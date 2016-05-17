@@ -98,7 +98,7 @@ public class IndexServlet extends HttpServlet {
 			req.setAttribute("hashtag3", hashtag3);
 			req.setAttribute("hashtag4", hashtag4);
 
-			// Si hay tweets insertados en la base de datos: extraigo 8 usuarios y sus tweets para la tabla "Usuarios totales". Esto es para test?
+			// Si hay tweets insertados en la base de datos: extraigo 8 usuarios y sus tweets para la tabla "Últimos tweets"
 			if (insertedTweets.size() > 0) {
 
 				ArrayList<Tweet> lastTweets = new ArrayList<Tweet>();
