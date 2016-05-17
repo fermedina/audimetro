@@ -205,7 +205,7 @@
 								<c:if test="${empty client}">
 									<div class="col-lg-8 info_client">
 										<span class="titulo">Presiona el botón para copiar al portapapeles el enlace de monitorización:</span>
-										<button class="btn btn-info" data-clipboard-text="http://1-dot-audimetro-1314.appspot.com/client?searchId=${busquedaId}">
+										<button class="btn btn-info" data-clipboard-text="http://1-dot-lunar-caster-131415.appspot.com/client?searchId=${busquedaId}">
 										    Enlace
 										</button>
 									</div>
@@ -220,7 +220,7 @@
                 <div class="row list-hashtag">
                     <div class="col-lg-3 col-md-6">
                         <div class="panel panel-primary">
-                            <div class="panel-heading">
+                            <div class="panel-heading" title="#${hashtag1.nombre}">
                                 <div class="row">
                                     <div class="col-xs-3">
                                         <i class="fa fa-hashtag fa-3x"></i>
@@ -251,7 +251,7 @@
                     <c:if test="${not empty hashtag2}">
                     	<div class="col-lg-3 col-md-6">
 	                        <div class="panel panel-green-black">
-	                            <div class="panel-heading">
+	                            <div class="panel-heading" title="#${hashtag2.nombre}">
 	                                <div class="row">
 	                                    <div class="col-xs-3">
 	                                        <i class="fa fa-hashtag fa-3x"></i>
@@ -282,7 +282,7 @@
                     <c:if test="${not empty hashtag3}">
 	                    <div class="col-lg-3 col-md-6">
 	                        <div class="panel panel-orange">
-	                            <div class="panel-heading">
+	                            <div class="panel-heading" title="#${hashtag3.nombre}">
 	                                <div class="row">
 	                                    <div class="col-xs-3">
 	                                        <i class="fa fa-hashtag fa-3x"></i>
@@ -313,7 +313,7 @@
 	                <c:if test="${not empty hashtag4}">
 	                    <div class="col-lg-3 col-md-6">
 	                        <div class="panel panel-red">
-	                            <div class="panel-heading">
+	                            <div class="panel-heading" title="#${hashtag4.nombre}">
 	                                <div class="row">
 	                                    <div class="col-xs-3">
 	                                        <i class="fa fa-hashtag fa-3x"></i>
