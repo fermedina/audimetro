@@ -43,13 +43,16 @@ public class TweetDAOImpl implements TweetDAO {
 	}
 	
 	@Override
-	public boolean isStored(Tweet tweet) {
+	public boolean isStored(String usuario, String texto) {
 		EntityManager em = EMFService.get().createEntityManager();
 		
-		boolean isStored = em.contains(tweet);
+		Query q = em.createQuery("select t from Tweet t where t.usuario = :usuario and t.texto = :texto");
+		q.setParameter("usuario", usuario);
+		q.setParameter("texto", texto);
+		List<Tweet> res = q.getResultList();
 		
 		em.close();
-		return isStored;
+		return !res.isEmpty();
 	}
 
 	@Override
@@ -69,6 +72,19 @@ public class TweetDAOImpl implements TweetDAO {
 		
 		Query q = em.createQuery("select t from Tweet t where t.hashtagId = :hashtagId order by t.createdAt asc");
 		q.setParameter("hashtagId", hashtagId);
+		List<Tweet> res = q.getResultList();
+		
+		em.close();
+		return res;
+	}
+	
+	@Override
+	public List<Tweet> getTweetListByUserAndHashtagId(String hashtagId, String usuario) {
+		EntityManager em = EMFService.get().createEntityManager();
+		
+		Query q = em.createQuery("select t from Tweet t where t.hashtagId = :hashtagId and t.usuario = :usuario order by t.createdAt asc");
+		q.setParameter("hashtagId", hashtagId);
+		q.setParameter("usuario", usuario);
 		List<Tweet> res = q.getResultList();
 		
 		em.close();
