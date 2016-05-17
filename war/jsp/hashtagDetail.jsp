@@ -60,45 +60,82 @@
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                 <ul class="nav navbar-nav side-nav">
                     <li>
-                        <a href="index"><i class="fa fa-home"></i> Inicio</a>
+                        <c:if test="${not empty client}">
+                        	<a href="client?searchId=${client}"><i class="fa fa-home"></i> Inicio</a>
+                        </c:if>
+                        <c:if test="${empty client}">
+                        	<a href="index"><i class="fa fa-home"></i> Inicio</a>
+                        </c:if>
                     </li>
-                    <li>
-                        <a href="javascript:;" data-toggle="collapse" data-target="#demo2"><i class="fa fa-fw fa-list-ol"></i> Búsquedas anteriores <i class="fa fa-fw fa-caret-down"></i></a>
-                        <ul id="demo2" class="collapse">
-                        
-                        	<c:forEach items="${searchList}" var="search">
-                        		<li>
-	                                <a href="index?searchId=${search.id}"><i class="fa fa-search"></i> <c:out value="${search.nombre}" /></a>
-	                            </li>
-                        	</c:forEach>
-                        </ul>
-                    </li>
+                    <c:if test="${empty client}">
+	                    <li>
+	                        <a href="javascript:;" data-toggle="collapse" data-target="#demo2"><i class="fa fa-fw fa-list-ol"></i> Búsquedas anteriores <i class="fa fa-fw fa-caret-down"></i></a>
+	                        <ul id="demo2" class="collapse">
+	                        
+	                        	<c:forEach items="${searchList}" var="search">
+	                        		<li>
+		                                <a href="index?searchId=${search.id}"><i class="fa fa-search"></i> <c:out value="${search.nombre}" /></a>
+		                            </li>
+	                        	</c:forEach>
+	                        </ul>
+	                    </li>
+	                </c:if>
                     <li class="active">
                         <a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="fa fa-fw fa-list"></i> Hashtags <i class="fa fa-fw fa-caret-down"></i></a>
                         <ul id="demo" class="collapse">
                             <li>
-                                <a href="hashtagDetail?id=${hashtag1.id}"><i class="fa fa-hashtag"></i> <c:out value="${hashtag1.nombre}" /></a>
+                            	<c:if test="${not empty client}">
+		                        	<a href="clientDetail?id=${hashtag1.id}">
+		                        </c:if>
+		                        <c:if test="${empty client}">
+		                        	<a href="hashtagDetail?id=${hashtag1.id}">
+		                        </c:if> 
+                                	<i class="fa fa-hashtag"></i> <c:out value="${hashtag1.nombre}" />
+                                </a>
                             </li>
                             <c:if test="${not empty hashtag2}">                                          
 	                            <li>
-	                                <a href="hashtagDetail?id=${hashtag2.id}"><i class="fa fa-hashtag"></i> <c:out value="${hashtag2.nombre}" /></a>
+	                                <c:if test="${not empty client}">
+		                        		<a href="clientDetail?id=${hashtag2.id}">
+			                        </c:if>
+			                        <c:if test="${empty client}">
+			                        	<a href="hashtagDetail?id=${hashtag2.id}">
+			                        </c:if> 
+	                                	<i class="fa fa-hashtag"></i> <c:out value="${hashtag2.nombre}" />
+	                                </a>
 	                            </li>
                             </c:if>
                             <c:if test="${not empty hashtag3}">
 	                            <li>
-	                                <a href="hashtagDetail?id=${hashtag3.id}"><i class="fa fa-hashtag"></i> <c:out value="${hashtag3.nombre}" /></a>
+	                                <c:if test="${not empty client}">
+		                        		<a href="clientDetail?id=${hashtag3.id}">
+			                        </c:if>
+			                        <c:if test="${empty client}">
+			                        	<a href="hashtagDetail?id=${hashtag3.id}">
+			                        </c:if> 
+	                                	<i class="fa fa-hashtag"></i> <c:out value="${hashtag3.nombre}" />
+	                                </a>
 	                            </li>
                             </c:if>
                             <c:if test="${not empty hashtag4}">
 	                            <li>
-	                                <a href="hashtagDetail?id=${hashtag4.id}"><i class="fa fa-hashtag"></i> <c:out value="${hashtag4.nombre}" /></a>
+	                                <c:if test="${not empty client}">
+		                        		<a href="clientDetail?id=${hashtag4.id}">
+			                        </c:if>
+			                        <c:if test="${empty client}">
+			                        	<a href="hashtagDetail?id=${hashtag4.id}">
+			                        </c:if> 
+	                                	<i class="fa fa-hashtag"></i> <c:out value="${hashtag4.nombre}" />
+	                                </a>
 	                            </li>
                             </c:if>
                         </ul>
                     </li>
-                    <li>
-                        <a href="add"><i class="fa fa-fw fa-edit"></i> Configuración de búsqueda</a>
-                    </li>
+                    <c:if test="${empty client}">
+	                    <li>
+	                        <a href="add"><i class="fa fa-fw fa-edit"></i> Configuración de búsqueda</a>
+	                    </li>
+                    </c:if>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -116,7 +153,13 @@
                         </h1>
                         <ol class="breadcrumb">
                             <li>
-                                <i class="fa fa-list"></i>  <a href="index">Hashtags</a>
+                                <i class="fa fa-list"></i>
+                                <c:if test="${not empty client}">
+		                        	<a href="client?searchId=${client}">Hashtags</a>
+		                        </c:if>
+		                        <c:if test="${empty client}">
+		                        	<a href="index">Hashtags</a>
+		                        </c:if> 
                             </li>
                             <li class="active">
                                 <i class="fa fa-hashtag"></i> <c:out value="${hashtag.nombre}" />
@@ -125,20 +168,6 @@
                     </div>
                 </div>
                 <!-- /.row -->
-
-                <!-- Timeline -->
-                <!-- <div class="row">
-                    <div class="col-lg-12">
-                        <div class="panel panel-red">
-                            <div class="panel-heading">
-                                <h3 class="panel-title"><i class="fa fa-bar-chart-o"></i> Timeline</h3>
-                            </div>
-                            <div class="panel-body">
-                                <div id="morris-area-chart"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>-->
                 
                 <div class="row">
                     <div class="col-lg-12">
@@ -351,51 +380,6 @@
 	        });
 	    } );
     </script>
-    
-    <!-- Area Chart -->
-    <!--<script type="text/javascript">
-    	var data = [];
-    	var intervalos = "${intervalos}";
-    	
-    	function js_yyyy_mm_dd_hh_mm (now) {
-   		  	year = "" + now.getFullYear();
-   		  	month = "" + (now.getMonth() + 1); if (month.length == 1) { month = "0" + month; }
-   		  	day = "" + now.getDate(); if (day.length == 1) { day = "0" + day; }
-   		  	hour = "" + now.getHours(); if (hour.length == 1) { hour = "0" + hour; }
-   		  	minute = "" + now.getMinutes(); if (minute.length == 1) { minute = "0" + minute; }
-   		  	return year + "-" + month + "-" + day + " " + hour + ":" + minute;
-   		}
-    	
-    	for(var i = 0; i <= intervalos; i++) {
-    		var fechas = [];
-    		var tweets = [];
-    		<c:forEach items="${datos}" var="dato">
-    			var a = "${dato.intervalo}";
-    			var b = a.split("CEST");
-    			var d = new Date(b[0]);
-				fechas.push(d);
-    			tweets.push("${dato.tweets}");
-			</c:forEach>
-    		var format = js_yyyy_mm_dd_hh_mm(fechas[i]);
-    		data.push({
-    			period: format,
-	            hashtag1: tweets[i],
-    		});
-    	}
-    
-	    Morris.Area({
-	        element: 'morris-area-chart',
-	        data: data,
-	        xkey: 'period', // Valores eje x
-	        ykeys: ['hashtag1'], // Valores eje y
-	        labels: ['Cantidad'],
-	        pointSize: 3,
-	        hideHover: 'auto',
-	        resize: true,
-	        lineColors: ['#337AB7']
-	        //'#5cb85c', '#f0ad4e', '#d9534f', '#FF8000', '#AC58FA', '#0404B4', '#088A08'
-	    });
-    </script>-->
     
     <!-- Idiomas -->
     <script type="text/javascript">

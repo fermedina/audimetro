@@ -24,7 +24,7 @@ import es.upm.dit.isst.quientv.model.Tweet;
 import es.upm.dit.isst.utilities.Utilities;
 
 @SuppressWarnings("serial")
-public class IndexServlet extends HttpServlet {
+public class ClientServlet extends HttpServlet {
 	public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
 		resp.setContentType("text/plain");
 
@@ -36,7 +36,16 @@ public class IndexServlet extends HttpServlet {
 		req.setAttribute("searchList", searchList);
 		
 		// Id de la búsqueda que queremos ver
-		String inputBusquedaId = req.getParameter("searchId");
+		String busquedaEncript = req.getParameter("searchId");
+		System.out.println("busqueda "+busquedaEncript);
+		String inputBusquedaId = "";
+		try {
+			inputBusquedaId = Utilities.desencriptar(busquedaEncript.replace(' ','+'));
+			req.setAttribute("client", inputBusquedaId);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		String busquedaId;
 		Busqueda busqueda = null;
@@ -56,10 +65,6 @@ public class IndexServlet extends HttpServlet {
 		
 		req.setAttribute("busqueda", busqueda);
 		
-		//Encriptamos el id de búsqueda para el cliente
-		String encriptado = Utilities.encriptar(busquedaId);
-		req.setAttribute("busquedaId", encriptado);
-		
 		List<Hashtag> hashtags = hashtagDao.getHashtagListByBusquedaId(busquedaId);
 		List<Tweet> allTweets = tweetDao.getTweetList();
 		ArrayList<Tweet> insertedTweets = new ArrayList<Tweet>();
@@ -76,21 +81,39 @@ public class IndexServlet extends HttpServlet {
 				
 		if (hashtags.size() > 0) {
 			Hashtag hashtag1 = hashtags.get(0);
+			String encriptH1Id = Utilities.encriptar(hashtag1.getId());
+			hashtag1.setId(encriptH1Id);
+			
 			Hashtag hashtag2 = null;
 			Hashtag hashtag3 = null;
 			Hashtag hashtag4 = null;
 
 			if (hashtags.size() == 2) {
 				hashtag2 = hashtags.get(1);
+				String encriptH2Id = Utilities.encriptar(hashtag2.getId());
+				hashtag2.setId(encriptH2Id);
 			}
 			if (hashtags.size() == 3) {
 				hashtag2 = hashtags.get(1);
+				String encriptH2Id = Utilities.encriptar(hashtag2.getId());
+				hashtag2.setId(encriptH2Id);
+				
 				hashtag3 = hashtags.get(2);
+				String encriptH3Id = Utilities.encriptar(hashtag3.getId());
+				hashtag3.setId(encriptH3Id);
 			}
 			if (hashtags.size() == 4) {
 				hashtag2 = hashtags.get(1);
+				String encriptH2Id = Utilities.encriptar(hashtag2.getId());
+				hashtag2.setId(encriptH2Id);
+				
 				hashtag3 = hashtags.get(2);
+				String encriptH3Id = Utilities.encriptar(hashtag3.getId());
+				hashtag3.setId(encriptH3Id);
+				
 				hashtag4 = hashtags.get(3);
+				String encriptH4Id = Utilities.encriptar(hashtag4.getId());
+				hashtag4.setId(encriptH4Id);
 			}
 
 			req.setAttribute("hashtag1", hashtag1);

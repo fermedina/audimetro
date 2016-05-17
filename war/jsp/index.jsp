@@ -57,47 +57,84 @@
             <div class="collapse navbar-collapse navbar-ex1-collapse">
                 <ul class="nav navbar-nav side-nav">
                     <li class="active">
-                        <a href="index"><i class="fa fa-home"></i> Inicio</a>
+                    	<c:if test="${not empty client}">
+                        	<a href="client?searchId=${client}"><i class="fa fa-home"></i> Inicio</a>
+                        </c:if>
+                        <c:if test="${empty client}">
+                        	<a href="index"><i class="fa fa-home"></i> Inicio</a>
+                        </c:if>
                     </li>
-                    <li>
-                        <a href="javascript:;" data-toggle="collapse" data-target="#demo2"><i class="fa fa-fw fa-list-ol"></i> Búsquedas anteriores <i class="fa fa-fw fa-caret-down"></i></a>
-                        <ul id="demo2" class="collapse">
-                        
-                        	<c:forEach items="${searchList}" var="search">
-                        		<li>
-	                                <a href="index?searchId=${search.id}"><i class="fa fa-search"></i> <c:out value="${search.nombre}" /></a>
-	                            </li>
-                        	</c:forEach>
-                        </ul>
-                    </li>
+                    <c:if test="${empty client}">
+	                    <li>
+	                        <a href="javascript:;" data-toggle="collapse" data-target="#demo2"><i class="fa fa-fw fa-list-ol"></i> Búsquedas anteriores <i class="fa fa-fw fa-caret-down"></i></a>
+	                        <ul id="demo2" class="collapse">
+	                        
+	                        	<c:forEach items="${searchList}" var="search">
+	                        		<li>
+		                                <a href="index?searchId=${search.id}"><i class="fa fa-search"></i> <c:out value="${search.nombre}" /></a>
+		                            </li>
+	                        	</c:forEach>
+	                        </ul>
+	                    </li>
+	                </c:if>
                     <c:if test="${not empty insertedTweets}">
 	                    <li>
 	                        <a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="fa fa-fw fa-list"></i> Hashtags <i class="fa fa-fw fa-caret-down"></i></a>
 	                        <ul id="demo" class="collapse">
 	                            <li>
-	                                <a href="hashtagDetail?id=${hashtag1.id}"><i class="fa fa-hashtag"></i> <c:out value="${hashtag1.nombre}" /></a>
+	                            	<c:if test="${not empty client}">
+			                        	<a href="clientDetail?id=${hashtag1.id}">
+			                        </c:if>
+			                        <c:if test="${empty client}">
+			                        	<a href="hashtagDetail?id=${hashtag1.id}">
+			                        </c:if> 
+	                                	<i class="fa fa-hashtag"></i> <c:out value="${hashtag1.nombre}" />
+	                                </a>
 	                            </li>
 	                            <c:if test="${not empty hashtag2}">                                          
 		                            <li>
-		                                <a href="hashtagDetail?id=${hashtag2.id}"><i class="fa fa-hashtag"></i> <c:out value="${hashtag2.nombre}" /></a>
+		                                <c:if test="${not empty client}">
+			                        		<a href="clientDetail?id=${hashtag2.id}">
+				                        </c:if>
+				                        <c:if test="${empty client}">
+				                        	<a href="hashtagDetail?id=${hashtag2.id}">
+				                        </c:if> 
+		                                	<i class="fa fa-hashtag"></i> <c:out value="${hashtag2.nombre}" />
+		                                </a>
 		                            </li>
 	                            </c:if>
 	                            <c:if test="${not empty hashtag3}">
 		                            <li>
-		                                <a href="hashtagDetail?id=${hashtag3.id}"><i class="fa fa-hashtag"></i> <c:out value="${hashtag3.nombre}" /></a>
+		                                <c:if test="${not empty client}">
+			                        		<a href="clientDetail?id=${hashtag3.id}">
+				                        </c:if>
+				                        <c:if test="${empty client}">
+				                        	<a href="hashtagDetail?id=${hashtag3.id}">
+				                        </c:if> 
+		                                	<i class="fa fa-hashtag"></i> <c:out value="${hashtag3.nombre}" />
+		                                </a>
 		                            </li>
 	                            </c:if>
 	                            <c:if test="${not empty hashtag4}">
 		                            <li>
-		                                <a href="hashtagDetail?id=${hashtag4.id}"><i class="fa fa-hashtag"></i> <c:out value="${hashtag4.nombre}" /></a>
+		                                <c:if test="${not empty client}">
+			                        		<a href="clientDetail?id=${hashtag4.id}">
+				                        </c:if>
+				                        <c:if test="${empty client}">
+				                        	<a href="hashtagDetail?id=${hashtag4.id}">
+				                        </c:if> 
+		                                	<i class="fa fa-hashtag"></i> <c:out value="${hashtag4.nombre}" />
+		                                </a>
 		                            </li>
 	                            </c:if>
 	                        </ul>
 	                    </li>
                     </c:if>
-                    <li>
-                        <a href="add"><i class="fa fa-fw fa-edit"></i> Configuración de búsqueda</a>
-                    </li>
+                    <c:if test="${empty client}">
+	                    <li>
+	                        <a href="add"><i class="fa fa-fw fa-edit"></i> Configuración de búsqueda</a>
+	                    </li>
+                    </c:if>
                 </ul>
             </div>
             <!-- /.navbar-collapse -->
@@ -158,10 +195,14 @@
 									</div>
 								</div>
 								
-								<!--<div class="col-lg-6 info_client">
-									<span class="titulo">Obtener enlace de monitorización:</span>
-						    		<button type="button" class="btn btn-info">Enlace</button>
-								</div>-->
+								<c:if test="${empty client}">
+									<div class="col-lg-8 info_client">
+										<span class="titulo">Presiona el botón para copiar al portapapeles el enlace de monitorización:</span>
+										<button class="btn btn-info" data-clipboard-text="http://1-dot-audimetro-1314.appspot.com/client?searchId=${busquedaId}">
+										    Enlace
+										</button>
+									</div>
+								</c:if>
 					  		</div>
 						</div>
                     </div>
@@ -184,7 +225,13 @@
                                 </div>
                             </div>
                             <c:if test="${not empty insertedTweets}">
-	                            <a href="hashtagDetail?id=${hashtag1.id}">
+	                            <c:if test="${not empty client}">
+		                        	<a href="clientDetail?id=${hashtag1.id}">
+		                        </c:if>
+		                        <c:if test="${empty client}">
+		                        	<a href="hashtagDetail?id=${hashtag1.id}">
+		                        </c:if> 
+	                            
 	                                <div class="panel-footer">
 	                                    <span class="pull-left">Ver detalles</span>
 	                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -209,7 +256,12 @@
 	                                </div>
 	                            </div>
 	                            <c:if test="${not empty insertedTweets}">
-		                            <a href="hashtagDetail?id=${hashtag2.id}">
+		                            <c:if test="${not empty client}">
+			                        	<a href="clientDetail?id=${hashtag2.id}">
+			                        </c:if>
+			                        <c:if test="${empty client}">
+			                        	<a href="hashtagDetail?id=${hashtag2.id}">
+			                        </c:if> 
 		                                <div class="panel-footer">
 		                                    <span class="pull-left">Ver detalles</span>
 		                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -235,7 +287,12 @@
 	                                </div>
 	                            </div>
 	                            <c:if test="${not empty insertedTweets}">
-		                            <a href="hashtagDetail?id=${hashtag3.id}">
+		                            <c:if test="${not empty client}">
+			                        	<a href="clientDetail?id=${hashtag3.id}">
+			                        </c:if>
+			                        <c:if test="${empty client}">
+			                        	<a href="hashtagDetail?id=${hashtag3.id}">
+			                        </c:if> 
 		                                <div class="panel-footer">
 		                                    <span class="pull-left">Ver detalles</span>
 		                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -261,7 +318,12 @@
 	                                </div>
 	                            </div>
 	                            <c:if test="${not empty insertedTweets}">
-		                            <a href="hashtagDetail?id=${hashtag4.id}">
+		                            <c:if test="${not empty client}">
+			                        	<a href="clientDetail?id=${hashtag4.id}">
+			                        </c:if>
+			                        <c:if test="${empty client}">
+			                        	<a href="hashtagDetail?id=${hashtag4.id}">
+			                        </c:if> 
 		                                <div class="panel-footer">
 		                                    <span class="pull-left">Ver detalles</span>
 		                                    <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
@@ -378,6 +440,8 @@
     <script src="js/plugins/morris/raphael.min.js"></script>
     <script src="js/plugins/morris/morris.min.js"></script>
     
+    <script src="js/plugins/clipboard/clipboard.min.js"></script>
+    
     <!-- Donut Chart -->
     <script type="text/javascript">
     	var data = [];
@@ -404,6 +468,19 @@
 	        data: data,
 	        resize: true,
 	        colors: ['#337AB7', '#088A08', '#FF8000', '#d9534f']
+	    });
+    </script>
+    
+    <script type="text/javascript">
+	    var clipboard = new Clipboard('.btn');
+	
+	    clipboard.on('success', function(e) {	
+	        e.clearSelection();
+	    });
+	
+	    clipboard.on('error', function(e) {
+	        console.error('Action:', e.action);
+	        console.error('Trigger:', e.trigger);
 	    });
     </script>
 </body>
