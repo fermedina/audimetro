@@ -76,7 +76,7 @@ public class SearchServlet extends HttpServlet {
 												status.getUser().getFollowersCount(), 
 												status.getRetweetCount(), 
 												status.getFavoriteCount());
-					if (!tweetDao.isStored(tweet)){
+					if (!tweetDao.isStored(tweet.getUsuario(), tweet.getTexto())){
 						insertedTweets.add(tweetDao.newTweet(tweet));
 					}
 				}
