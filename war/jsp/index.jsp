@@ -59,6 +59,17 @@
                     <li class="active">
                         <a href="index"><i class="fa fa-home"></i> Inicio</a>
                     </li>
+                    <li>
+                        <a href="javascript:;" data-toggle="collapse" data-target="#demo2"><i class="fa fa-fw fa-list-ol"></i> Búsquedas anteriores <i class="fa fa-fw fa-caret-down"></i></a>
+                        <ul id="demo2" class="collapse">
+                        
+                        	<c:forEach items="${searchList}" var="search">
+                        		<li>
+	                                <a href="index?searchId=${search.id}"><i class="fa fa-search"></i> <c:out value="${search.nombre}" /></a>
+	                            </li>
+                        	</c:forEach>
+                        </ul>
+                    </li>
                     <c:if test="${not empty insertedTweets}">
 	                    <li>
 	                        <a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="fa fa-fw fa-list"></i> Hashtags <i class="fa fa-fw fa-caret-down"></i></a>
@@ -84,17 +95,6 @@
 	                        </ul>
 	                    </li>
                     </c:if>
-                    <li>
-                        <a href="javascript:;" data-toggle="collapse" data-target="#demo2"><i class="fa fa-fw fa-list-ol"></i> Búsquedas anteriores <i class="fa fa-fw fa-caret-down"></i></a>
-                        <ul id="demo2" class="collapse">
-                        
-                        	<c:forEach items="${searchList}" var="search">
-                        		<li>
-	                                <a href="index?searchId=${search.id}"><i class="fa fa-search"></i> <c:out value="${search.nombre}" /></a>
-	                            </li>
-                        	</c:forEach>
-                        </ul>
-                    </li>
                     <li>
                         <a href="add"><i class="fa fa-fw fa-edit"></i> Configuración de búsqueda</a>
                     </li>

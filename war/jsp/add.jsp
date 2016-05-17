@@ -56,6 +56,19 @@
                     <li>
                         <a href="index"><i class="fa fa-home"></i> Inicio</a>
                     </li>
+                    <c:if test="${not empty searchList}">
+						<li>
+	                        <a href="javascript:;" data-toggle="collapse" data-target="#demo2"><i class="fa fa-fw fa-list-ol"></i> Búsquedas anteriores <i class="fa fa-fw fa-caret-down"></i></a>
+	                        <ul id="demo2" class="collapse">
+	                        
+	                        	<c:forEach items="${searchList}" var="search">
+	                        		<li>
+		                                <a href="index?searchId=${search.id}"><i class="fa fa-search"></i> <c:out value="${search.nombre}" /></a>
+		                            </li>
+	                        	</c:forEach>
+	                        </ul>
+	                    </li>
+                    </c:if>
                     <c:if test="${not empty hashtags}">
                     	<li>
 	                        <a href="javascript:;" data-toggle="collapse" data-target="#demo"><i class="fa fa-fw fa-list"></i> Hashtags <i class="fa fa-fw fa-caret-down"></i></a>
@@ -81,19 +94,6 @@
 	                        </ul>
 	                    </li>
 					</c:if>
-					<c:if test="${not empty searchList}">
-						<li>
-	                        <a href="javascript:;" data-toggle="collapse" data-target="#demo2"><i class="fa fa-fw fa-list-ol"></i> Búsquedas anteriores <i class="fa fa-fw fa-caret-down"></i></a>
-	                        <ul id="demo2" class="collapse">
-	                        
-	                        	<c:forEach items="${searchList}" var="search">
-	                        		<li>
-		                                <a href="index?searchId=${search.id}"><i class="fa fa-search"></i> <c:out value="${search.nombre}" /></a>
-		                            </li>
-	                        	</c:forEach>
-	                        </ul>
-	                    </li>
-                    </c:if>
                     <li class="active">
                         <a href="add"><i class="fa fa-fw fa-edit"></i> Configuración de búsqueda</a>
                     </li>
@@ -200,7 +200,7 @@
 	                        <div class="form-group titulo"><i class="fa fa-hashtag"></i> Hashtag 4</div>
 	                        	<div class="form-group input-group">
 	                                <span class="input-group-addon"><i class="fa fa-television"></i></span>
-	                                <input type="text" name="progra4" class="form-control" placeholder="Programa">
+	                                <input type="text" name="program4" class="form-control" placeholder="Programa">
 	                            </div>
 	                            <div class="form-group input-group">
 	                                <span class="input-group-addon"><i class="fa fa-hashtag"></i></span>
@@ -212,7 +212,7 @@
                         <div class="col-lg-6 franja">
 
                             <div class="form-group">
-                                <label>Seleccione la franja horaria</label>
+                                <label>Búsqueda programada, seleccione la franja horaria</label>
                                 <select class="form-control" id="select_franja" name="franja_horaria">
                                     <option></option>
                                     <option value="despertador">Despertador: 7:30 a las 9 h</option>
@@ -245,7 +245,7 @@
                             
                         </div>
                         <div class="col-lg-6 franja">
-                            <label>Seleccione la hora de fin</label>
+                            <label>Búsqueda inmediata, seleccione la hora de fin</label>
                         </div>
 
                         <div class="col-lg-2">
