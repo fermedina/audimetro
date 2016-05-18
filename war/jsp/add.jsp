@@ -245,7 +245,7 @@
                             
                         </div>
                         <div class="col-lg-6 franja">
-                            <label>Búsqueda inmediata, seleccione la hora de fin</label>
+                            <label>Búsqueda inmediata, seleccione la hora de fin <span style="color: #9F6000" title="En Safari o Firefox utilizar el formato YYYY-MM-DDTHH:mm">?</span></label>
                         </div>
 
                         <div class="col-lg-2">
